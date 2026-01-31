@@ -1,4 +1,4 @@
-# chatgpt_ips
+# DomainAndIpManager
 
 Manage domain/IP lists for AI and GFW contexts, run DNS lookups, and export timestamped outputs. Includes CLI scripts and a GUI editor.
 
