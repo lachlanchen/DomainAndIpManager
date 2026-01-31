@@ -146,6 +146,12 @@ label.inline select {
   font-size: 0.85rem;
 }
 
+.section-hint {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 .toggles {
   gap: 12px;
   align-items: center;
