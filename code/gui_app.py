@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from pathlib import Path
+import threading
+import webbrowser
 from typing import Dict, List
 
 from flask import Flask, jsonify, request, send_from_directory
@@ -140,4 +142,8 @@ def styles_css():
 
 
 if __name__ == "__main__":
+    def _open_browser():
+        webbrowser.open("http://127.0.0.1:5000", new=2)
+
+    threading.Timer(0.6, _open_browser).start()
     app.run(host="127.0.0.1", port=5000, debug=False)
