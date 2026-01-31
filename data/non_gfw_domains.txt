@@ -1,4 +1,35 @@
-# ===== Ctrip / Trip.com (携程) =====
+# ===== Google / YouTube / Google APIs =====
+yt3.googleusercontent.com
+yt3.ggpht.com
+i.ytimg.com
+youtubei.googleapis.com
+s.youtube.com
+www.youtube.com
+redirector.googlevideo.com
+clients3.google.com
+www.google.com
+www.google.cn
+www.google.com.hk
+suggestqueries.google.com
+oauthaccountmanager.googleapis.com
+oauth2.googleapis.com
+play.googleapis.com
+notifications-pa.googleapis.com
+app-analytics-services.com
+www.gstatic.com
+g.doubleclick.net
+googleads.g.doubleclick.net
+
+# GoogleVideo shards
+googlevideo.com
+rr1---sn-jhi3-i3bk.googlevideo.com
+rr1---sn-jhi3-i3b6.googlevideo.com
+rr2---sn-jhi3-i3bk.googlevideo.com
+rr2---sn-jhi3-i3bd.googlevideo.com
+rr2---sn-jhi3-i3b6.googlevideo.com
+rr3---sn-jhi3-i3bd.googlevideo.com
+
+# ===== Ctrip / Trip.com =====
 m.ctrip.com
 tcpgateway-sgp.trip.com
 s.c-ctrip.com
@@ -9,7 +40,7 @@ ak-d.tripcdn.cn
 ak-s.tripcdn.cn
 bd-s.tripcdn.cn
 
-# ===== Meituan / Dianping (美团 / 大众点评) =====
+# ===== Meituan / Dianping =====
 s1.d.meituan.net
 s3plus.meituan.net
 p0.meituan.net
@@ -34,12 +65,10 @@ route-stats.dreport.meituan.net
 portal-portm.meituan.com
 wmapi.meituan.com
 dd.meituan.com
-
-# Dianping
 catdot.dianping.com
 catfront.dianping.com
 
-# ===== Amap / Gaode (高德地图) =====
+# ===== Amap / Gaode =====
 m5.amap.com
 m5-x.amap.com
 mps.amap.com
@@ -53,21 +82,29 @@ faas-image.amap.com
 # ===== Alibaba / Alipay / Taobao =====
 mdap.alipay.com
 mobilegw.alipay.com
-mgsacs.m.taobao.com
+gw.alipayobjects.com
+mdn.alipayobjects.com
+mdn-bs.alipayobjects.com
+collect.alipay.com
+tracert.alipay.com
+loggw-ex.alipay.com
+amdc.alipay.com
+datagw-edge.alipay.com
+audid-api.taobao.com
 guide-acs.m.taobao.com
-adashx.m.taobao.com
-h-adashx.ut.taobao.com
+acs.m.taobao.com
+msgacs.m.taobao.com
 arup.m.taobao.com
 eco.taobao.com
 err.taobao.com
-acs.m.taobao.com
 atoken.m.taobao.com
 api-mayi.django.t.taobao.com
 gaode-acs.m.taobao.com
-audid-api.taobao.com
+h-adashx.ut.taobao.com
+adashx.m.taobao.com
 www.taobao.com
 
-# Alibaba infra / CDN / logging
+# Alibaba infra / CDN
 gw.alicdn.com
 g.alicdn.com
 httpdns.alicdn.com
@@ -77,22 +114,12 @@ mum.alibabachengdu.com
 acs-mum.alibabachengdu.com
 poplayer.template.alibaba.com
 
-# Alipay objects / logging
-gw.alipayobjects.com
-mdn.alipayobjects.com
-mdn-bs.alipayobjects.com
-collect.alipay.com
-tracert.alipay.com
-loggw-ex.alipay.com
-amdc.alipay.com
-datagw-edge.alipay.com
-
-# Aliyun logs / OSS
+# Aliyun / OSS / Logs
 gnss-eph.oss-cn-hangzhou.aliyuncs.com
 impaas-for-client.cn-shanghai.log.aliyuncs.com
 client-upload.cn-shanghai.log.aliyuncs.com
 
-# ===== Tencent / CDN / Video =====
+# ===== Tencent / Others =====
 1251413404.vod2.myqcloud.com
 kuaishou.httpdns.pro
 
@@ -107,5 +134,5 @@ s-gm.mmstat.com
 ifs.tanx.com
 kgb-ifs.tanx.com
 
-# ===== Apple (China reachable) =====
+# ===== Apple =====
 inappcheck.itunes.apple.com

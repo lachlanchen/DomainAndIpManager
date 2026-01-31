@@ -1,4 +1,3 @@
-# Ctrip / Meituan / Alibaba / Alipay / Amap IPs
 47.235.21.35
 47.235.21.38
 47.235.21.45
