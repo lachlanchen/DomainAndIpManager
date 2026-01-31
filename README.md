@@ -27,6 +27,7 @@ Lists are line-delimited and stored under `data/`:
 - `gfw_*` for GFW lists
 - `ai_gfw_*` for combined lists
 - `gfw_wo_ai_*` for GFW without AI
+- `non_gfw_*` for China-accessible (non-GFW) lists
 - `default_*` for the legacy/default list
 
 Example:

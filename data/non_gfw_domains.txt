@@ -1,0 +1,98 @@
+# Search / Portals
+baidu.com
+www.baidu.com
+so.com
+www.so.com
+sogou.com
+www.sogou.com
+sohu.com
+www.sohu.com
+163.com
+www.163.com
+126.com
+ifeng.com
+www.ifeng.com
+
+# Tencent / WeChat ecosystem
+qq.com
+www.qq.com
+weixin.qq.com
+wx.qq.com
+tenpay.com
+cloud.tencent.com
+qcloud.com
+
+# Alibaba ecosystem
+alibaba.com.cn
+alipay.com
+www.alipay.com
+taobao.com
+www.taobao.com
+tmall.com
+www.tmall.com
+1688.com
+aliyun.com
+www.aliyun.com
+antgroup.com
+
+# NetEase (Wangyi)
+163.com
+netease.com
+www.netease.com
+youdao.com
+www.youdao.com
+yun.163.com
+music.163.com
+uu.163.com
+uuyuyin.com
+uu.netease.com
+
+# Video / Streaming
+iqiyi.com
+www.iqiyi.com
+youku.com
+www.youku.com
+tudou.com
+v.qq.com
+mgtv.com
+www.mgtv.com
+bilibili.com
+www.bilibili.com
+
+# E-commerce / Services
+jd.com
+www.jd.com
+pinduoduo.com
+www.pinduoduo.com
+meituan.com
+www.meituan.com
+ele.me
+dianping.com
+
+# Payments / Finance
+weibo.com
+www.weibo.com
+unionpay.com
+www.unionpay.com
+pingan.com
+
+# Tools / Cloud / Dev (China-accessible)
+gitee.com
+www.gitee.com
+coding.net
+oschina.net
+www.oschina.net
+
+# Remote / Gaming / Utilities
+uuyuyin.com
+uu.163.com
+netease.com
+
+# Maps / Travel
+amap.com
+www.amap.com
+map.baidu.com
+ctrip.com
+www.ctrip.com
+qunar.com
+www.qunar.com
