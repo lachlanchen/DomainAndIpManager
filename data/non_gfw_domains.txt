@@ -1,103 +1,4 @@
-# Search / Portals
-baidu.com
-www.baidu.com
-so.com
-www.so.com
-sogou.com
-www.sogou.com
-sohu.com
-www.sohu.com
-163.com
-www.163.com
-126.com
-ifeng.com
-www.ifeng.com
-
-# Tencent / WeChat ecosystem
-qq.com
-www.qq.com
-weixin.qq.com
-wx.qq.com
-tenpay.com
-cloud.tencent.com
-qcloud.com
-
-# Alibaba ecosystem
-alibaba.com.cn
-alipay.com
-www.alipay.com
-taobao.com
-www.taobao.com
-tmall.com
-www.tmall.com
-1688.com
-aliyun.com
-www.aliyun.com
-antgroup.com
-
-# NetEase (Wangyi)
-163.com
-netease.com
-www.netease.com
-youdao.com
-www.youdao.com
-yun.163.com
-music.163.com
-uu.163.com
-uuyuyin.com
-uu.netease.com
-
-# Video / Streaming
-iqiyi.com
-www.iqiyi.com
-youku.com
-www.youku.com
-tudou.com
-v.qq.com
-mgtv.com
-www.mgtv.com
-bilibili.com
-www.bilibili.com
-
-# E-commerce / Services
-jd.com
-www.jd.com
-pinduoduo.com
-www.pinduoduo.com
-meituan.com
-www.meituan.com
-ele.me
-dianping.com
-
-# Payments / Finance
-weibo.com
-www.weibo.com
-unionpay.com
-www.unionpay.com
-pingan.com
-
-# Tools / Cloud / Dev (China-accessible)
-gitee.com
-www.gitee.com
-coding.net
-oschina.net
-www.oschina.net
-
-# Remote / Gaming / Utilities
-uuyuyin.com
-uu.163.com
-netease.com
-
-# Maps / Travel
-amap.com
-www.amap.com
-map.baidu.com
-ctrip.com
-www.ctrip.com
-qunar.com
-www.qunar.com
-
-# Non-GFW traffic (app-specific)
+# ===== Ctrip / Trip.com (携程) =====
 m.ctrip.com
 tcpgateway-sgp.trip.com
 s.c-ctrip.com
@@ -107,6 +8,8 @@ ma-adx.ctrip.com
 ak-d.tripcdn.cn
 ak-s.tripcdn.cn
 bd-s.tripcdn.cn
+
+# ===== Meituan / Dianping (美团 / 大众点评) =====
 s1.d.meituan.net
 s3plus.meituan.net
 p0.meituan.net
@@ -131,8 +34,12 @@ route-stats.dreport.meituan.net
 portal-portm.meituan.com
 wmapi.meituan.com
 dd.meituan.com
+
+# Dianping
 catdot.dianping.com
 catfront.dianping.com
+
+# ===== Amap / Gaode (高德地图) =====
 m5.amap.com
 m5-x.amap.com
 mps.amap.com
@@ -142,14 +49,63 @@ adashx.ut.amap.com
 ai.amap.com
 awaken.amap.com
 faas-image.amap.com
+
+# ===== Alibaba / Alipay / Taobao =====
 mdap.alipay.com
 mobilegw.alipay.com
-mum.alibabachengdu.com
+mgsacs.m.taobao.com
+guide-acs.m.taobao.com
+adashx.m.taobao.com
+h-adashx.ut.taobao.com
+arup.m.taobao.com
+eco.taobao.com
+err.taobao.com
+acs.m.taobao.com
 atoken.m.taobao.com
+api-mayi.django.t.taobao.com
 gaode-acs.m.taobao.com
-gnss-eph.oss-cn-hangzhou.aliyuncs.com
+audid-api.taobao.com
+www.taobao.com
+
+# Alibaba infra / CDN / logging
+gw.alicdn.com
+g.alicdn.com
 httpdns.alicdn.com
+wvcfg.alicdn.com
+cdn.ynuf.aliapp.org
+mum.alibabachengdu.com
+acs-mum.alibabachengdu.com
+poplayer.template.alibaba.com
+
+# Alipay objects / logging
+gw.alipayobjects.com
+mdn.alipayobjects.com
+mdn-bs.alipayobjects.com
+collect.alipay.com
+tracert.alipay.com
+loggw-ex.alipay.com
+amdc.alipay.com
+datagw-edge.alipay.com
+
+# Aliyun logs / OSS
+gnss-eph.oss-cn-hangzhou.aliyuncs.com
+impaas-for-client.cn-shanghai.log.aliyuncs.com
+client-upload.cn-shanghai.log.aliyuncs.com
+
+# ===== Tencent / CDN / Video =====
 1251413404.vod2.myqcloud.com
 kuaishou.httpdns.pro
+
+# ===== iQIYI =====
 i.qchannel03.cn
+
+# ===== UC / Analytics =====
+applog.uc.cn
+log.mmstat.com
+gm.mmstat.com
+s-gm.mmstat.com
+ifs.tanx.com
+kgb-ifs.tanx.com
+
+# ===== Apple (China reachable) =====
 inappcheck.itunes.apple.com
