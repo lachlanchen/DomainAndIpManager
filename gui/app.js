@@ -1,7 +1,9 @@
 const listKey = document.getElementById("listKey");
 const listType = document.getElementById("listType");
 const maskInput = document.getElementById("mask");
-const listEditor = document.getElementById("listEditor");
+const domainsEditor = document.getElementById("domainsEditor");
+const customIpsEditor = document.getElementById("customIpsEditor");
+const cidrEditor = document.getElementById("cidrEditor");
 const output = document.getElementById("output");
 const listCount = document.getElementById("listCount");
 const outputCount = document.getElementById("outputCount");
@@ -35,14 +37,19 @@ async function fetchDomainSet(key) {
 async function fetchList() {
   status.textContent = "Loading...";
   const key = listKey.value;
-  const type = listType.value;
-  const [listRes, maskRes] = await Promise.all([
-    fetch(`/api/list?key=${key}&type=${type}`),
+  const [domainsRes, customIpsRes, cidrRes, maskRes] = await Promise.all([
+    fetch(`/api/list?key=${key}&type=domains`),
+    fetch(`/api/list?key=${key}&type=custom_ips`),
+    fetch(`/api/list?key=${key}&type=cidr`),
     fetch(`/api/mask?key=${key}`),
   ]);
-  const listData = await listRes.json();
+  const domainsData = await domainsRes.json();
+  const customIpsData = await customIpsRes.json();
+  const cidrData = await cidrRes.json();
   const maskData = await maskRes.json();
-  listEditor.value = (listData.lines || []).join("\n");
+  domainsEditor.value = (domainsData.lines || []).join("\n");
+  customIpsEditor.value = (customIpsData.lines || []).join("\n");
+  cidrEditor.value = (cidrData.lines || []).join("\n");
   maskInput.value = maskData.mask || "30";
   updateCounts();
   await loadLastOutput();
@@ -50,7 +57,11 @@ async function fetchList() {
 }
 
 function updateCounts() {
-  listCount.textContent = `${linesFrom(listEditor.value).length} lines`;
+  const total =
+    linesFrom(domainsEditor.value).length +
+    linesFrom(customIpsEditor.value).length +
+    linesFrom(cidrEditor.value).length;
+  listCount.textContent = `${total} lines`;
   outputCount.textContent = `${linesFrom(output.value).length} lines`;
 }
 
@@ -64,13 +75,26 @@ function linesFrom(text) {
 async function saveList() {
   status.textContent = "Saving...";
   const key = listKey.value;
-  const type = listType.value;
-  const lines = linesFrom(listEditor.value);
-  await fetch("/api/list", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ key, type, lines }),
-  });
+  const domains = linesFrom(domainsEditor.value);
+  const customIps = linesFrom(customIpsEditor.value);
+  const cidr = linesFrom(cidrEditor.value);
+  await Promise.all([
+    fetch("/api/list", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key, type: "domains", lines: domains }),
+    }),
+    fetch("/api/list", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key, type: "custom_ips", lines: customIps }),
+    }),
+    fetch("/api/list", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key, type: "cidr", lines: cidr }),
+    }),
+  ]);
   await fetch("/api/mask", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -139,7 +163,9 @@ async function copyOutput() {
 
 listKey.addEventListener("change", fetchList);
 listType.addEventListener("change", fetchList);
-listEditor.addEventListener("input", updateCounts);
+domainsEditor.addEventListener("input", updateCounts);
+customIpsEditor.addEventListener("input", updateCounts);
+cidrEditor.addEventListener("input", updateCounts);
 output.addEventListener("input", updateCounts);
 themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("dark");

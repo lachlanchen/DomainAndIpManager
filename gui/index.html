@@ -80,10 +80,20 @@
           </label>
         </div>
 
-        <label class="textarea">
-          <span>One entry per line</span>
-          <textarea id="listEditor" spellcheck="false"></textarea>
-        </label>
+        <div class="tri-grid">
+          <div class="tri-col">
+            <span class="tri-label">Domains</span>
+            <textarea id="domainsEditor" spellcheck="false"></textarea>
+          </div>
+          <div class="tri-col">
+            <span class="tri-label">Custom IPs</span>
+            <textarea id="customIpsEditor" spellcheck="false"></textarea>
+          </div>
+          <div class="tri-col">
+            <span class="tri-label">CIDR</span>
+            <textarea id="cidrEditor" spellcheck="false"></textarea>
+          </div>
+        </div>
         <div class="section-hint">
           Use <code>#</code> for section headers; they are kept in the file and ignored on run.
         </div>
