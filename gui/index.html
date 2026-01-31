@@ -54,6 +54,13 @@
             <span>Mask</span>
             <input id="mask" type="text" value="30" />
           </label>
+          <label class="inline">
+            <span>Output mode</span>
+            <select id="outputMode">
+              <option value="both" selected>Domains + IPs</option>
+              <option value="ips_only">IPs only</option>
+            </select>
+          </label>
         </div>
 
         <div class="row toggles">
@@ -70,17 +77,6 @@
             <input type="checkbox" id="includeCidr" />
             CIDR
           </label>
-        </div>
-
-        <div class="row inline-controls">
-          <label class="inline">
-            <span>Output mode</span>
-            <select id="outputMode">
-              <option value="both" selected>Domains + IPs</option>
-              <option value="ips_only">IPs only</option>
-            </select>
-          </label>
-          <span class="hint">Load/Save applies to the current list and mask.</span>
         </div>
 
         <label class="textarea">
