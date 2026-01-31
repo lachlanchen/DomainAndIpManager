@@ -12,14 +12,17 @@
     />
     <link rel="stylesheet" href="/styles.css" />
   </head>
-  <body>
+  <body class="light">
     <div class="bg"></div>
     <header class="hero">
       <div>
         <h1>Domain & IP Manager</h1>
         <p>Maintain AI, GFW, and combined lists. Run lookups with one click.</p>
       </div>
-      <div class="badge">Output saved to <code>output/</code> with datetime</div>
+      <div class="hero-actions">
+        <button id="themeToggle" class="ghost small">Light</button>
+        <div class="badge">Output saved to <code>output/</code> with datetime</div>
+      </div>
     </header>
 
     <main class="layout">

@@ -6,6 +6,7 @@ const output = document.getElementById("output");
 const listCount = document.getElementById("listCount");
 const outputCount = document.getElementById("outputCount");
 const status = document.getElementById("status");
+const themeToggle = document.getElementById("themeToggle");
 
 async function fetchList() {
   status.textContent = "Loading...";
@@ -77,6 +78,11 @@ listKey.addEventListener("change", fetchList);
 listType.addEventListener("change", fetchList);
 listEditor.addEventListener("input", updateCounts);
 output.addEventListener("input", updateCounts);
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  const isDark = document.body.classList.contains("dark");
+  themeToggle.textContent = isDark ? "Dark" : "Light";
+});
 
 document.getElementById("loadBtn").addEventListener("click", fetchList);
 document.getElementById("saveBtn").addEventListener("click", saveList);
