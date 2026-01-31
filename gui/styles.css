@@ -177,6 +177,12 @@ button {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+select,
+input,
+button {
+  min-height: 44px;
+}
+
 button:hover {
   transform: translateY(-1px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
