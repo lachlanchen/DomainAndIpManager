@@ -20,6 +20,7 @@ DEFAULT_MASKS: Dict[str, str] = {
     "ai_gfw": "30",
     "gfw_wo_ai": "30",
     "non_gfw": "30",
+    "wechat": "30",
     "default": "30",
 }
 

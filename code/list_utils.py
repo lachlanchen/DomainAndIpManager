@@ -37,6 +37,7 @@ STEM_TO_KEY = {
     "nslookup_simplified_gfw": "gfw",
     "nslookup_simplified_gfw_w_ai": "ai_gfw",
     "nslookup_simplified_gfw_wo_ai": "gfw_wo_ai",
+    "nslookup_simplified_wechat": "wechat",
     "nslookup": "default",
 }
 

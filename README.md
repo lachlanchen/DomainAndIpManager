@@ -28,6 +28,7 @@ Lists are line-delimited and stored under `data/`:
 - `ai_gfw_*` for combined lists
 - `gfw_wo_ai_*` for GFW without AI
 - `non_gfw_*` for China-accessible (non-GFW) lists
+- `wechat_*` for WeChat traffic lists
 - `default_*` for the legacy/default list
 
 Example:
