@@ -20,7 +20,7 @@ DEFAULT_MASKS: Dict[str, str] = {
     "default": "30",
 }
 
-app = Flask(__name__, static_folder=str(GUI_DIR), static_url_path="/")
+app = Flask(__name__)
 
 
 def run_lookup(
