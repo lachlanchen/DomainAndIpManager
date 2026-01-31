@@ -37,7 +37,7 @@ function linesFrom(text) {
   return text
     .split(/\r?\n/)
     .map((line) => line.trim())
-    .filter((line) => line.length > 0 && !line.startsWith("#"));
+    .filter((line) => line.length > 0);
 }
 
 async function saveList() {
