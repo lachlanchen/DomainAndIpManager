@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Domain & IP Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="bg"></div>
+    <header class="hero">
+      <div>
+        <h1>Domain & IP Manager</h1>
+        <p>Maintain AI, GFW, and combined lists. Run lookups with one click.</p>
+      </div>
+      <div class="badge">Output saved to <code>output/</code> with datetime</div>
+    </header>
+
+    <main class="layout">
+      <section class="card controls">
+        <h2>Lists</h2>
+        <div class="row">
+          <label>
+            List set
+            <select id="listKey">
+              <option value="ai_gfw" selected>AI + GFW</option>
+              <option value="ai">AI</option>
+              <option value="gfw">GFW</option>
+              <option value="gfw_wo_ai">GFW (No AI)</option>
+              <option value="default">Default</option>
+            </select>
+          </label>
+          <label>
+            List type
+            <select id="listType">
+              <option value="domains" selected>Domains</option>
+              <option value="custom_ips">Custom IPs</option>
+              <option value="cidr">CIDR Blocks</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="row">
+          <label class="mask">
+            Mask
+            <input id="mask" type="text" value="32" />
+          </label>
+          <div class="actions">
+            <button id="loadBtn" class="ghost">Load</button>
+            <button id="saveBtn">Save</button>
+          </div>
+        </div>
+
+        <label class="textarea">
+          <span>One entry per line</span>
+          <textarea id="listEditor" spellcheck="false"></textarea>
+        </label>
+        <div class="meta">
+          <span id="listCount">0 lines</span>
+          <span id="status">Ready</span>
+        </div>
+      </section>
+
+      <section class="card output">
+        <div class="output-header">
+          <h2>Run Output</h2>
+          <div class="actions">
+            <button id="runBtn" class="primary">Run</button>
+            <button id="copyBtn" class="ghost">Copy</button>
+          </div>
+        </div>
+        <label class="textarea">
+          <span>Results</span>
+          <textarea id="output" spellcheck="false" readonly></textarea>
+        </label>
+        <div class="meta">
+          <span id="outputCount">0 lines</span>
+          <span>Saved with timestamp</span>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
