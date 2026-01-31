@@ -115,7 +115,8 @@ scontent-lax3-2.cdninstagram.com
 scontent-lax3-1.cdninstagram.com
 static.cdninstagram.com
 i.instagram.com
-www.instagram.comwhatsapp.com
+www.instagram.com
+whatsapp.com
 www.whatsapp.com
 web.whatsapp.com
 api.whatsapp.com

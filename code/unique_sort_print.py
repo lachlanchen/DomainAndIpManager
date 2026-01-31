@@ -38,8 +38,9 @@ def parse_file(path: Path) -> Tuple[List[str], List[str]]:
 
 def main() -> None:
     input_file = Path("domain_and_ips.txt")
-    output_txt = Path("domain_and_ips_unique_sorted.txt")
-    output_json = Path("domain_and_ips_unique_sorted.json")
+    output_dir = Path("output")
+    output_txt = output_dir / "domain_and_ips_unique_sorted.txt"
+    output_json = output_dir / "domain_and_ips_unique_sorted.json"
 
     if not input_file.exists():
         raise SystemExit(f"Input file not found: {input_file}")
@@ -54,6 +55,8 @@ def main() -> None:
     print("\n===== IPS =====")
     for ip in ips:
         print(ip)
+
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     # ---- write TXT (one per row) ----
     with output_txt.open("w", encoding="utf-8") as f:
@@ -81,4 +84,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

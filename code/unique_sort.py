@@ -39,7 +39,12 @@ def main() -> None:
 
     ap = argparse.ArgumentParser()
     ap.add_argument("-i", "--input", default="domain_and_ips.txt", help="Input filename")
-    ap.add_argument("-o", "--output", default="domain_and_ips_unique_sorted.json", help="Output JSON filename")
+    ap.add_argument(
+        "-o",
+        "--output",
+        default="output/domain_and_ips_unique_sorted.json",
+        help="Output JSON filename",
+    )
     args = ap.parse_args()
 
     in_path = Path(args.input)
@@ -48,15 +53,13 @@ def main() -> None:
 
     domains, ips = parse_file(in_path)
 
-    out_obj = {
-        "domains": domains,
-        "ips": ips
-    }
+    out_obj = {"domains": domains, "ips": ips}
 
-    Path(args.output).write_text(json.dumps(out_obj, indent=2), encoding="utf-8")
+    out_path = Path(args.output)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(out_obj, indent=2), encoding="utf-8")
     print(f"Done. domains={len(domains)} ips={len(ips)} -> {args.output}")
 
 
 if __name__ == "__main__":
     main()
-
