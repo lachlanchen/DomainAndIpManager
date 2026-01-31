@@ -15,11 +15,11 @@ def get_ips(domain):
         answers = dns.resolver.resolve(domain, 'A')
         return [answer.to_text() for answer in answers]
     except dns.resolver.NoAnswer:
-        return ["No A record found"]
+        return []
     except dns.resolver.NXDOMAIN:
-        return ["No such domain"]
+        return []
     except Exception as e:
-        return [f"Error obtaining IPs for domain {domain}: {e}"]
+        return []
 
 results = []
 
