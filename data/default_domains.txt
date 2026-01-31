@@ -1,28 +1,43 @@
+# Google AI
 notebooklm.google
 notebooklm.google.com
+
+# Anthropic / Claude
 claude.ai
 api.claude.ai
+
+# Google Core
 accounts.google.com
 a-cdn.anthropic.com
 fonts.gstatic.com
+
+# Intercom
 widget.intercom.io
 js.intercomcdn.com
 www.gstatic.com
 statsig.anthropic.com
 www.google.com
 s-cdn.anthropic.com
+
+# Payments
 js.stripe.com
 m.stripe.network
+
+# OpenAI / ChatGPT
 pay.openai.com
 api.openai.com
 cdn.openai.com
 fonts.googleapis.com
 openai-api.arkoselabs.com
 openaiapi-site.azureedge.net
+
+# Apple / RevenueCat
 amp-api-edge.apps.apple.com
 api.revenuecat.com
 api.statsig.com
 ios.chat.openai.com
+
+# Telemetry
 o33249.ingest.sentry.io
 browser-intake-dataloghq.com
 chatgpt.livekit.cloud
@@ -32,6 +47,8 @@ api.revenuecat.com
 inappcheck.itunes.apple.com
 chatgpt.livekit.cloud
 api.statsig.com
+
+# Certificates / OCSP
 ocsp.digicert.com
 amp-api-edge.apps.apple.com
 zerossl.ocsp.sectigo.com
@@ -59,6 +76,8 @@ events.statsigapi.net
 statsigapi.net
 googleusercontent.com
 lh3.googleusercontent.com
+
+# Cloudflare
 challenges.cloudflare.com
 www.cloudflare.com
 cloudflare.com

@@ -1,3 +1,4 @@
+# Google
 google.com
 www.google.com
 google.cn
@@ -50,6 +51,8 @@ clients4.google.com
 dl.google.com
 update.googleapis.com
 crl.pki.goog
+
+# YouTube
 youtube.com
 www.youtube.com
 m.youtube.com
@@ -60,6 +63,8 @@ i.ytimg.com
 googlevideo.com
 youtube.googleapis.com
 youtubei.googleapis.com
+
+# Meta (Facebook/Instagram/WhatsApp)
 facebook.com
 www.facebook.com
 m.facebook.com
@@ -83,6 +88,8 @@ api.whatsapp.com
 static.whatsapp.net
 meta.com
 www.meta.com
+
+# X / Twitter
 twitter.com
 www.twitter.com
 mobile.twitter.com
@@ -92,19 +99,27 @@ video.twimg.com
 t.co
 x.com
 www.x.com
+
+# Telegram
 telegram.org
 t.me
 web.telegram.org
 api.telegram.org
+
+# Reddit
 reddit.com
 www.reddit.com
 redd.it
 old.reddit.com
+
+# Discord
 discord.com
 www.discord.com
 discord.gg
 cdn.discordapp.com
 media.discordapp.net
+
+# Streaming
 netflix.com
 www.netflix.com
 nflxvideo.net
@@ -119,6 +134,8 @@ www.soundcloud.com
 vimeo.com
 www.vimeo.com
 player.vimeo.com
+
+# Storage & Collaboration
 dropbox.com
 www.dropbox.com
 dropboxusercontent.com
@@ -133,12 +150,16 @@ www.notion.so
 notion.site
 medium.com
 www.medium.com
+
+# GitHub
 github.com
 www.github.com
 api.github.com
 raw.githubusercontent.com
 githubusercontent.com
 githubassets.com
+
+# CDN & Ads/Analytics
 cloudfront.net
 fastly.net
 akamai.net

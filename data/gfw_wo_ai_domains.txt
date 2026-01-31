@@ -1,3 +1,4 @@
+# Google
 google.com
 www.google.com
 google.cn
@@ -17,12 +18,16 @@ fonts.gstatic.com
 gstatic.com
 googleapis.com
 youtube.googleapis.com
+
+# YouTube
 youtube.com
 www.youtube.com
 m.youtube.com
 youtu.be
 youtube-nocookie.com
 googlevideo.com
+
+# Meta (Facebook/Instagram/WhatsApp)
 facebook.com
 www.facebook.com
 m.facebook.com
@@ -39,48 +44,70 @@ www.instagram.com
 m.instagram.com
 api.instagram.com
 cdninstagram.com
+
+# X / Twitter
 twitter.com
 www.twitter.com
 mobile.twitter.com
 api.twitter.com
 t.co
 x.com
+
+# Google Dev/Android
 blogger.com
 blogspot.com
 firebaseio.com
 firebase.google.com
 chromium.org
 android.com
+
+# Apple
 itunes.apple.com
 apps.apple.com
 music.apple.com
 developer.apple.com
+
+# Microsoft/Bing
 bing.com
 www.bing.com
+
+# GitHub
 github.com
 raw.githubusercontent.com
 githubusercontent.com
+
+# Microsoft Services
 onedrive.live.com
 outlook.com
+
+# Telegram/Signal/Snapchat
 telegram.org
 t.me
 web.telegram.org
 signal.org
 snapchat.com
+
+# Reddit/Discord
 reddit.com
 discord.com
 discord.gg
+
+# Streaming
 netflix.com
 twitch.tv
 soundcloud.com
 vimeo.com
 dailymotion.com
+
+# Storage & Collaboration
 dropbox.com
 box.com
 slack.com
 trello.com
 notion.so
 medium.com
+
+# CDN & Ads/Analytics
 cloudfront.net
 fastly.net
 akamai.net

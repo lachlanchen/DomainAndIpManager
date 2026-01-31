@@ -1,3 +1,4 @@
+# Google AI
 gemini.google.com
 ai.google.dev
 aistudio.google.com
@@ -19,11 +20,15 @@ play.google.com
 signaler-pa.clients6.google.com
 www.google.com.sg
 www.google.com
+
+# Anthropic / Claude
 claude.ai
 api.claude.ai
 a-cdn.anthropic.com
 s-cdn.anthropic.com
 statsig.anthropic.com
+
+# OpenAI / ChatGPT
 chat.openai.com
 ios.chat.openai.com
 android.chat.openai.com
