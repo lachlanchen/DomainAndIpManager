@@ -28,6 +28,7 @@ def run_lookup(
     include_domains: bool,
     include_custom_ips: bool,
     include_cidr: bool,
+    output_mode: str,
 ) -> List[str]:
     mask = load_mask(list_key, DEFAULT_MASKS.get(list_key, "32"))
     domains, custom_ips, cidr = load_lists(list_key)
@@ -45,10 +46,12 @@ def run_lookup(
             return [f"Error obtaining IPs for domain {domain}: {exc}"]
 
     results: List[str] = []
-    include_domain_ips = include_domains and (include_custom_ips or include_cidr)
+    include_domain_ips = include_domains
+    include_domain_names = include_domains and output_mode == "both"
 
     if include_domains:
-        results.extend(domains)
+        if include_domain_names:
+            results.extend(domains)
         if include_domain_ips:
             for domain in domains:
                 ips = get_ips(domain)
@@ -119,8 +122,9 @@ def api_run():
     include_domains = bool(payload.get("include_domains", True))
     include_custom_ips = bool(payload.get("include_custom_ips", False))
     include_cidr = bool(payload.get("include_cidr", False))
+    output_mode = payload.get("output_mode", "both")
     output_lines = run_lookup(
-        list_key, include_domains, include_custom_ips, include_cidr
+        list_key, include_domains, include_custom_ips, include_cidr, output_mode
     )
     return jsonify({"lines": output_lines})
 

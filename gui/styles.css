@@ -32,6 +32,7 @@ body {
   color: var(--text);
   background: radial-gradient(circle at 10% 10%, var(--bg2), var(--bg) 60%);
   min-height: 100vh;
+  font-size: 17px;
 }
 
 .bg {
@@ -156,6 +157,7 @@ textarea {
 textarea {
   min-height: 260px;
   resize: vertical;
+  font-size: 16px;
 }
 
 .textarea span {

@@ -10,6 +10,7 @@ const themeToggle = document.getElementById("themeToggle");
 const includeDomains = document.getElementById("includeDomains");
 const includeCustomIps = document.getElementById("includeCustomIps");
 const includeCidr = document.getElementById("includeCidr");
+const outputMode = document.getElementById("outputMode");
 
 async function fetchList() {
   status.textContent = "Loading...";
@@ -69,6 +70,7 @@ async function runLookup() {
       include_domains: includeDomains.checked,
       include_custom_ips: includeCustomIps.checked,
       include_cidr: includeCidr.checked,
+      output_mode: outputMode.value,
     }),
   });
   const data = await res.json();
