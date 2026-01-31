@@ -64,6 +64,7 @@ clients3.google.com
 www.google.com.sg
 www.gstatic.com
 clients3.google.com
+yt3.googleusercontent.com
 # YouTube
 youtube.com
 www.youtube.com
@@ -97,6 +98,7 @@ rr2---sn-i5goxu-i3bl.googlevideo.com
 rr2---sn-npoldnel.googlevideo.com
 rr3---sn-jhi3-i3bd.googlevideo.com
 rr3---sn-i5goxu-i3bl.googlevideo.com
+yt3.googleusercontent.com
 # Meta (Facebook/Instagram/WhatsApp)
 facebook.com
 www.facebook.com
@@ -206,3 +208,4 @@ googletagservices.com
 g.doubleclick.net
 googleads.g.doubleclick.net
 inappcheck.itunes.apple.com
+app-analytics-services.com
