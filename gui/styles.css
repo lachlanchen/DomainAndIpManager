@@ -124,6 +124,23 @@ label {
   margin-bottom: 16px;
 }
 
+.toggles {
+  gap: 12px;
+  align-items: center;
+  color: var(--muted);
+}
+
+.check {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.check input {
+  width: auto;
+}
+
 select,
 input,
 textarea {

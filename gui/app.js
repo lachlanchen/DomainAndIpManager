@@ -7,6 +7,9 @@ const listCount = document.getElementById("listCount");
 const outputCount = document.getElementById("outputCount");
 const status = document.getElementById("status");
 const themeToggle = document.getElementById("themeToggle");
+const includeDomains = document.getElementById("includeDomains");
+const includeCustomIps = document.getElementById("includeCustomIps");
+const includeCidr = document.getElementById("includeCidr");
 
 async function fetchList() {
   status.textContent = "Loading...";
@@ -19,7 +22,7 @@ async function fetchList() {
   const listData = await listRes.json();
   const maskData = await maskRes.json();
   listEditor.value = (listData.lines || []).join("\n");
-  maskInput.value = maskData.mask || "32";
+  maskInput.value = maskData.mask || "30";
   updateCounts();
   status.textContent = "Loaded";
 }
@@ -61,7 +64,12 @@ async function runLookup() {
   const res = await fetch("/api/run", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ key }),
+    body: JSON.stringify({
+      key,
+      include_domains: includeDomains.checked,
+      include_custom_ips: includeCustomIps.checked,
+      include_cidr: includeCidr.checked,
+    }),
   });
   const data = await res.json();
   output.value = (data.lines || []).join("\n");

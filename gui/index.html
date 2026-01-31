@@ -52,12 +52,28 @@
         <div class="row">
           <label class="mask">
             Mask
-            <input id="mask" type="text" value="32" />
+            <input id="mask" type="text" value="30" />
           </label>
           <div class="actions">
             <button id="loadBtn" class="ghost">Load</button>
             <button id="saveBtn">Save</button>
           </div>
+        </div>
+
+        <div class="row toggles">
+          <span>Include in output</span>
+          <label class="check">
+            <input type="checkbox" id="includeDomains" checked />
+            Domains
+          </label>
+          <label class="check">
+            <input type="checkbox" id="includeCustomIps" />
+            Custom IPs
+          </label>
+          <label class="check">
+            <input type="checkbox" id="includeCidr" />
+            CIDR
+          </label>
         </div>
 
         <label class="textarea">

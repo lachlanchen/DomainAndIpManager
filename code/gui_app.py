@@ -23,7 +23,12 @@ DEFAULT_MASKS: Dict[str, str] = {
 app = Flask(__name__, static_folder=str(GUI_DIR), static_url_path="/")
 
 
-def run_lookup(list_key: str) -> List[str]:
+def run_lookup(
+    list_key: str,
+    include_domains: bool,
+    include_custom_ips: bool,
+    include_cidr: bool,
+) -> List[str]:
     mask = load_mask(list_key, DEFAULT_MASKS.get(list_key, "32"))
     domains, custom_ips, cidr = load_lists(list_key)
     domains = unique_preserve(domains)
@@ -40,15 +45,20 @@ def run_lookup(list_key: str) -> List[str]:
             return [f"Error obtaining IPs for domain {domain}: {exc}"]
 
     results: List[str] = []
-    for domain in domains:
-        ips = get_ips(domain)
-        results.append(domain)
-        results.extend([ip + f"/{mask}" for ip in ips])
+    include_domain_ips = include_domains and (include_custom_ips or include_cidr)
 
-    for ip in custom_ips:
-        results.append(ip + f"/{mask}")
+    if include_domains:
+        results.extend(domains)
+        if include_domain_ips:
+            for domain in domains:
+                ips = get_ips(domain)
+                results.extend([ip + f"/{mask}" for ip in ips])
 
-    results.extend(cidr)
+    if include_custom_ips:
+        results.extend([ip + f"/{mask}" for ip in custom_ips])
+
+    if include_cidr:
+        results.extend(cidr)
 
     seen = set()
     output_lines = [x for x in results if not (x in seen or seen.add(x) or x.startswith("No"))]
@@ -106,7 +116,12 @@ def api_save_mask():
 def api_run():
     payload = request.get_json(force=True)
     list_key = payload.get("key", "ai_gfw")
-    output_lines = run_lookup(list_key)
+    include_domains = bool(payload.get("include_domains", True))
+    include_custom_ips = bool(payload.get("include_custom_ips", False))
+    include_cidr = bool(payload.get("include_cidr", False))
+    output_lines = run_lookup(
+        list_key, include_domains, include_custom_ips, include_cidr
+    )
     return jsonify({"lines": output_lines})
 
 
