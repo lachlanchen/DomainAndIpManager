@@ -47,10 +47,6 @@
               <option value="cidr">CIDR Blocks</option>
             </select>
           </label>
-          <div class="actions">
-            <button id="loadBtn" class="ghost">Load</button>
-            <button id="saveBtn">Save</button>
-          </div>
         </div>
 
         <div class="row inline-controls">
@@ -58,14 +54,6 @@
             <span>Mask</span>
             <input id="mask" type="text" value="30" />
           </label>
-          <label class="inline">
-            <span>Output mode</span>
-            <select id="outputMode">
-              <option value="both" selected>Domains + IPs</option>
-              <option value="ips_only">IPs only</option>
-            </select>
-          </label>
-          <span class="hint">Load/Save applies to the current list and mask.</span>
         </div>
 
         <div class="row toggles">
@@ -84,10 +72,25 @@
           </label>
         </div>
 
+        <div class="row inline-controls">
+          <label class="inline">
+            <span>Output mode</span>
+            <select id="outputMode">
+              <option value="both" selected>Domains + IPs</option>
+              <option value="ips_only">IPs only</option>
+            </select>
+          </label>
+          <span class="hint">Load/Save applies to the current list and mask.</span>
+        </div>
+
         <label class="textarea">
           <span>One entry per line</span>
           <textarea id="listEditor" spellcheck="false"></textarea>
         </label>
+        <div class="actions">
+          <button id="loadBtn" class="ghost">Load</button>
+          <button id="saveBtn">Save</button>
+        </div>
         <div class="meta">
           <span id="listCount">0 lines</span>
           <span id="status">Ready</span>
