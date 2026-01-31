@@ -8,6 +8,9 @@ Manage domain/IP lists for AI and GFW contexts, run DNS lookups, and export time
 ```
 Open `http://127.0.0.1:5000`.
 
+## Demo
+![Domain & IP Manager demo](demos/demo.png)
+
 ## CLI Usage
 ```bash
 python3 code/nslookup_simplified.py
