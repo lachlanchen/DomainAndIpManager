@@ -125,6 +125,22 @@ label {
   margin-bottom: 16px;
 }
 
+.inline-controls {
+  align-items: center;
+}
+
+label.inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+}
+
+label.inline input,
+label.inline select {
+  width: 160px;
+}
+
 .toggles {
   gap: 12px;
   align-items: center;
