@@ -250,6 +250,27 @@ button.small {
   flex-wrap: wrap;
 }
 
+.error-list {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  background: rgba(220, 38, 38, 0.08);
+}
+
+.error-list h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  color: #b91c1c;
+}
+
+.error-list ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #b91c1c;
+  font-size: 0.95rem;
+}
+
 @media (max-width: 720px) {
   .hero {
     flex-direction: column;

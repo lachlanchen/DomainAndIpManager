@@ -11,6 +11,8 @@ const includeDomains = document.getElementById("includeDomains");
 const includeCustomIps = document.getElementById("includeCustomIps");
 const includeCidr = document.getElementById("includeCidr");
 const outputMode = document.getElementById("outputMode");
+const errorBox = document.getElementById("errorBox");
+const errorList = document.getElementById("errorList");
 
 async function fetchList() {
   status.textContent = "Loading...";
@@ -61,6 +63,8 @@ async function saveList() {
 async function runLookup() {
   status.textContent = "Running...";
   output.value = "";
+  errorList.innerHTML = "";
+  errorBox.hidden = true;
   const key = listKey.value;
   const res = await fetch("/api/run", {
     method: "POST",
@@ -75,6 +79,14 @@ async function runLookup() {
   });
   const data = await res.json();
   output.value = (data.lines || []).join("\n");
+  if (data.errors && data.errors.length > 0) {
+    data.errors.forEach((domain) => {
+      const li = document.createElement("li");
+      li.textContent = domain;
+      errorList.appendChild(li);
+    });
+    errorBox.hidden = false;
+  }
   updateCounts();
   status.textContent = "Completed";
 }

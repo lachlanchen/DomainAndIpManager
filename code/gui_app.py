@@ -31,7 +31,7 @@ def run_lookup(
     include_custom_ips: bool,
     include_cidr: bool,
     output_mode: str,
-) -> List[str]:
+) -> tuple[list[str], list[str]]:
     mask = load_mask(list_key, DEFAULT_MASKS.get(list_key, "32"))
     domains, custom_ips, cidr = load_lists(list_key)
     domains = unique_preserve(domains)
@@ -48,6 +48,7 @@ def run_lookup(
             return []
 
     results: List[str] = []
+    errors: List[str] = []
     include_domain_ips = include_domains
     include_domain_names = include_domains and output_mode == "both"
 
@@ -57,6 +58,9 @@ def run_lookup(
         if include_domain_ips:
             for domain in domains:
                 ips = get_ips(domain)
+                if not ips:
+                    errors.append(domain)
+                    continue
                 results.extend([ip + f"/{mask}" for ip in ips])
 
     if include_custom_ips:
@@ -68,7 +72,7 @@ def run_lookup(
     seen = set()
     output_lines = [x for x in results if not (x in seen or seen.add(x) or x.startswith("No"))]
     write_output(output_lines, f"gui_{list_key}")
-    return output_lines
+    return output_lines, sorted(set(errors))
 
 
 @app.get("/")
@@ -125,10 +129,10 @@ def api_run():
     include_custom_ips = bool(payload.get("include_custom_ips", False))
     include_cidr = bool(payload.get("include_cidr", False))
     output_mode = payload.get("output_mode", "both")
-    output_lines = run_lookup(
+    output_lines, errors = run_lookup(
         list_key, include_domains, include_custom_ips, include_cidr, output_mode
     )
-    return jsonify({"lines": output_lines})
+    return jsonify({"lines": output_lines, "errors": errors})
 
 
 @app.get("/app.js")
