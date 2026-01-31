@@ -13,11 +13,11 @@ GUI_DIR = APP_ROOT / "gui"
 DATA_DIR = APP_ROOT / "data"
 
 DEFAULT_MASKS: Dict[str, str] = {
-    "ai": "32",
-    "gfw": "32",
-    "ai_gfw": "32",
-    "gfw_wo_ai": "32",
-    "default": "24",
+    "ai": "30",
+    "gfw": "30",
+    "ai_gfw": "30",
+    "gfw_wo_ai": "30",
+    "default": "30",
 }
 
 app = Flask(__name__, static_folder=str(GUI_DIR), static_url_path="/")
