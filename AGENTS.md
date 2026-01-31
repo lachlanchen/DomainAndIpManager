@@ -5,7 +5,7 @@
   - `nslookup*.py` resolve domain IPs and print CIDR blocks.
   - `unique_sort.py` and `unique_sort_print.py` de-duplicate and sort domain/IP lists.
 - `data/` contains line-delimited input lists (domains, custom IPs, CIDR blocks) keyed by list set:
-  - `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `wechat`, and `default`.
+  - `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, and `default`.
   - Example: `data/ai_domains.txt`, `data/ai_custom_ips.txt`, `data/ai_cidr.txt`, `data/ai_mask.txt`.
 - `output/` contains generated artifacts (sorted lists, lookup outputs).
 - Repo root keeps inputs like `domain_and_ips.txt` and project docs.

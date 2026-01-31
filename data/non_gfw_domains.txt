@@ -136,3 +136,36 @@ kgb-ifs.tanx.com
 
 # ===== Apple =====
 inappcheck.itunes.apple.com
+
+# ===== WeChat / Weixin =====
+servicewechat.com
+sh.servicewechat.com
+weixin.qq.com
+support.weixin.qq.com
+open.weixin.qq.com
+mp.weixin.qq.com
+short.weixin.qq.com
+minorshort.weixin.qq.com
+aedns.weixin.qq.com
+shquic.weixin.qq.com
+findeross.weixin.qq.com
+finderptyy.video.qq.com
+findermp.video.qq.com
+yun-hl.3g.qq.com
+up-hl.3g.qq.com
+wx.qlogo.cn
+mmbiz.qpic.cn
+mmwebwx.qpic.cn
+badjs.weixinbridge.com
+cube.weixinbridge.com
+launchwxacode.wxqcloud.qq.com.cn
+prewxacode.wxqcloud.qq.com.cn
+wxapp.tc.qq.com
+pingtas.qq.com
+short.pay.weixin.qq.com
+ocsp.digicert.cn
+st.moneydata.hk
+yktdt.utsz.edu.cn
+ddir1v6.qq.com
+chong.kingcard.qq.com
+i.qlogo.cn
