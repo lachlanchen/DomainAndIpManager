@@ -32,12 +32,35 @@ def unique_preserve(seq: Iterable[str]) -> List[str]:
     return out
 
 
-def load_lists(stem: str) -> Tuple[List[str], List[str], List[str]]:
+STEM_TO_KEY = {
+    "nslookup_simplified": "ai",
+    "nslookup_simplified_gfw": "gfw",
+    "nslookup_simplified_gfw_w_ai": "ai_gfw",
+    "nslookup_simplified_gfw_wo_ai": "gfw_wo_ai",
+    "nslookup": "default",
+}
+
+
+def resolve_key(stem_or_key: str) -> str:
+    return STEM_TO_KEY.get(stem_or_key, stem_or_key)
+
+
+def load_lists(stem_or_key: str) -> Tuple[List[str], List[str], List[str]]:
     base = repo_root() / "data"
-    domains = read_list_file(base / f"{stem}_domains.txt")
-    custom_ips = read_list_file(base / f"{stem}_custom_ips.txt")
-    cidr = read_list_file(base / f"{stem}_cidr.txt")
+    key = resolve_key(stem_or_key)
+    domains = read_list_file(base / f"{key}_domains.txt")
+    custom_ips = read_list_file(base / f"{key}_custom_ips.txt")
+    cidr = read_list_file(base / f"{key}_cidr.txt")
     return domains, custom_ips, cidr
+
+
+def load_mask(stem_or_key: str, default: str) -> str:
+    key = resolve_key(stem_or_key)
+    path = repo_root() / "data" / f"{key}_mask.txt"
+    if not path.exists():
+        return default
+    raw = path.read_text(encoding="utf-8").strip()
+    return raw or default
 
 
 def write_output(lines: Iterable[str], prefix: str) -> Path:

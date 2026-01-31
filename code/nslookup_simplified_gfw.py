@@ -2,9 +2,9 @@ from pathlib import Path
 
 import dns.resolver
 
-from list_utils import load_lists, unique_preserve, write_output
+from list_utils import load_lists, load_mask, unique_preserve, write_output
 
-mask = "32"
+mask = load_mask(Path(__file__).stem, "32")
 domains, custom_ips, cidr = load_lists(Path(__file__).stem)
 domains = unique_preserve(domains)
 

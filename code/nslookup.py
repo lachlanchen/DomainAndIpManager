@@ -2,8 +2,9 @@ from pathlib import Path
 
 import dns.resolver
 
-from list_utils import load_lists, unique_preserve, write_output
+from list_utils import load_lists, load_mask, unique_preserve, write_output
 
+mask = load_mask(Path(__file__).stem, "24")
 domains, custom_ips, cidr = load_lists(Path(__file__).stem)
 domains = unique_preserve(domains)
 
@@ -35,12 +36,12 @@ for domain in domains:
     ips = get_ips(domain)
     # print(f"The IP addresses of {domain} are: {ips}")
     # print(domain)
-    # print("\n".join([ip+"/24" for ip in ips]))
-    [results.append(ip+"/24") for ip in ips]
+    # print("\n".join([ip+f"/{mask}" for ip in ips]))
+    [results.append(ip+f"/{mask}") for ip in ips]
 
 for ip in custom_ips:
-    # print(ip + "/24")
-    results.append (ip + "/24")
+    # print(ip + f"/{mask}")
+    results.append (ip + f"/{mask}")
 
 for ip in cidr:
     # print(ip)
