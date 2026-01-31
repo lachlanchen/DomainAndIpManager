@@ -31,7 +31,7 @@ def run_lookup(
     include_custom_ips: bool,
     include_cidr: bool,
     output_mode: str,
-) -> tuple[list[str], list[str]]:
+) -> tuple[list[str], list[str], list[str]]:
     mask = load_mask(list_key, DEFAULT_MASKS.get(list_key, "32"))
     domains, custom_ips, cidr = load_lists(list_key)
     domains = unique_preserve(domains)
@@ -50,7 +50,7 @@ def run_lookup(
     results: List[str] = []
     errors: List[str] = []
     include_domain_ips = include_domains
-    include_domain_names = include_domains and output_mode == "both"
+    include_domain_names = include_domains
 
     if include_domains:
         if include_domain_names:
@@ -71,8 +71,13 @@ def run_lookup(
 
     seen = set()
     output_lines = [x for x in results if not (x in seen or seen.add(x) or x.startswith("No"))]
+    full_lines = output_lines
+    domain_set = set(domains)
+    if output_mode == "ips_only":
+        output_lines = [line for line in full_lines if line not in domain_set]
+
     write_output(output_lines, f"gui_{list_key}")
-    return output_lines, sorted(set(errors))
+    return full_lines, output_lines, sorted(set(errors))
 
 
 @app.get("/")
@@ -129,10 +134,26 @@ def api_run():
     include_custom_ips = bool(payload.get("include_custom_ips", False))
     include_cidr = bool(payload.get("include_cidr", False))
     output_mode = payload.get("output_mode", "both")
-    output_lines, errors = run_lookup(
+    full_lines, output_lines, errors = run_lookup(
         list_key, include_domains, include_custom_ips, include_cidr, output_mode
     )
-    return jsonify({"lines": output_lines, "errors": errors})
+    return jsonify({"lines": output_lines, "full_lines": full_lines, "errors": errors})
+
+
+@app.get("/api/last-output")
+def api_last_output():
+    list_key = request.args.get("key", "ai_gfw")
+    out_dir = APP_ROOT / "output"
+    prefix = f"gui_{list_key}_"
+    candidates = sorted(
+        [p for p in out_dir.glob(f\"{prefix}*.txt\") if p.is_file()],
+        key=lambda p: p.stat().st_mtime,
+    )
+    if not candidates:
+        return jsonify({"lines": []})
+    latest = candidates[-1]
+    lines = latest.read_text(encoding="utf-8").splitlines()
+    return jsonify({"lines": lines})
 
 
 @app.get("/app.js")

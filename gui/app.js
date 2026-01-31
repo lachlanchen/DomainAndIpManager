@@ -13,6 +13,24 @@ const includeCidr = document.getElementById("includeCidr");
 const outputMode = document.getElementById("outputMode");
 const errorBox = document.getElementById("errorBox");
 const errorList = document.getElementById("errorList");
+const lastOutputCache = new Map();
+
+let lastFullLines = [];
+let lastErrors = [];
+
+async function fetchDomainSet(key) {
+  if (lastOutputCache.has(key)) {
+    return lastOutputCache.get(key);
+  }
+  const res = await fetch(`/api/list?key=${key}&type=domains`);
+  const data = await res.json();
+  const domains = (data.lines || [])
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0 && !line.startsWith("#"));
+  const set = new Set(domains);
+  lastOutputCache.set(key, set);
+  return set;
+}
 
 async function fetchList() {
   status.textContent = "Loading...";
@@ -27,6 +45,7 @@ async function fetchList() {
   listEditor.value = (listData.lines || []).join("\n");
   maskInput.value = maskData.mask || "30";
   updateCounts();
+  await loadLastOutput();
   status.textContent = "Loaded";
 }
 
@@ -78,9 +97,11 @@ async function runLookup() {
     }),
   });
   const data = await res.json();
-  output.value = (data.lines || []).join("\n");
-  if (data.errors && data.errors.length > 0) {
-    data.errors.forEach((domain) => {
+  lastFullLines = data.full_lines || data.lines || [];
+  lastErrors = data.errors || [];
+  renderOutput();
+  if (lastErrors.length > 0) {
+    lastErrors.forEach((domain) => {
       const li = document.createElement("li");
       li.textContent = domain;
       errorList.appendChild(li);
@@ -89,6 +110,26 @@ async function runLookup() {
   }
   updateCounts();
   status.textContent = "Completed";
+}
+
+async function loadLastOutput() {
+  const key = listKey.value;
+  const res = await fetch(`/api/last-output?key=${key}`);
+  const data = await res.json();
+  lastFullLines = data.lines || [];
+  lastErrors = [];
+  renderOutput();
+}
+
+async function renderOutput() {
+  const key = listKey.value;
+  const domains = await fetchDomainSet(key);
+  if (outputMode.value === "ips_only") {
+    output.value = lastFullLines.filter((line) => !domains.has(line)).join("\n");
+  } else {
+    output.value = lastFullLines.join("\n");
+  }
+  updateCounts();
 }
 
 async function copyOutput() {
@@ -105,6 +146,7 @@ themeToggle.addEventListener("click", () => {
   const isDark = document.body.classList.contains("dark");
   themeToggle.textContent = isDark ? "Dark" : "Light";
 });
+outputMode.addEventListener("change", renderOutput);
 
 document.getElementById("loadBtn").addEventListener("click", fetchList);
 document.getElementById("saveBtn").addEventListener("click", saveList);
