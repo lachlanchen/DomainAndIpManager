@@ -146,7 +146,7 @@ def api_last_output():
     out_dir = APP_ROOT / "output"
     prefix = f"gui_{list_key}_"
     candidates = sorted(
-        [p for p in out_dir.glob(f\"{prefix}*.txt\") if p.is_file()],
+        [p for p in out_dir.glob(f"{prefix}*.txt") if p.is_file()],
         key=lambda p: p.stat().st_mtime,
     )
     if not candidates:
