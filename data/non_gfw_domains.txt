@@ -1,34 +1,3 @@
-# ===== Google / YouTube / Google APIs =====
-yt3.googleusercontent.com
-yt3.ggpht.com
-i.ytimg.com
-youtubei.googleapis.com
-s.youtube.com
-www.youtube.com
-redirector.googlevideo.com
-clients3.google.com
-www.google.com
-www.google.cn
-www.google.com.hk
-suggestqueries.google.com
-oauthaccountmanager.googleapis.com
-oauth2.googleapis.com
-play.googleapis.com
-notifications-pa.googleapis.com
-app-analytics-services.com
-www.gstatic.com
-g.doubleclick.net
-googleads.g.doubleclick.net
-
-# GoogleVideo shards
-googlevideo.com
-rr1---sn-jhi3-i3bk.googlevideo.com
-rr1---sn-jhi3-i3b6.googlevideo.com
-rr2---sn-jhi3-i3bk.googlevideo.com
-rr2---sn-jhi3-i3bd.googlevideo.com
-rr2---sn-jhi3-i3b6.googlevideo.com
-rr3---sn-jhi3-i3bd.googlevideo.com
-
 # ===== Ctrip / Trip.com =====
 m.ctrip.com
 tcpgateway-sgp.trip.com
