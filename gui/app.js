@@ -15,23 +15,17 @@ const includeCidr = document.getElementById("includeCidr");
 const outputMode = document.getElementById("outputMode");
 const errorBox = document.getElementById("errorBox");
 const errorList = document.getElementById("errorList");
-const lastOutputCache = new Map();
+const progressBar = document.getElementById("progressBar");
 
-let lastFullLines = [];
+let lastData = null;
+let lastOutputLines = [];
 let lastErrors = [];
 
-async function fetchDomainSet(key) {
-  if (lastOutputCache.has(key)) {
-    return lastOutputCache.get(key);
-  }
-  const res = await fetch(`/api/list?key=${key}&type=domains`);
-  const data = await res.json();
-  const domains = (data.lines || [])
+function linesFrom(text) {
+  return text
+    .split(/\r?\n/)
     .map((line) => line.trim())
-    .filter((line) => line.length > 0 && !line.startsWith("#"));
-  const set = new Set(domains);
-  lastOutputCache.set(key, set);
-  return set;
+    .filter((line) => line.length > 0);
 }
 
 async function fetchList() {
@@ -47,10 +41,12 @@ async function fetchList() {
   const customIpsData = await customIpsRes.json();
   const cidrData = await cidrRes.json();
   const maskData = await maskRes.json();
+
   domainsEditor.value = (domainsData.lines || []).join("\n");
   customIpsEditor.value = (customIpsData.lines || []).join("\n");
   cidrEditor.value = (cidrData.lines || []).join("\n");
   maskInput.value = maskData.mask || "30";
+
   updateCounts();
   await loadLastOutput();
   status.textContent = "Loaded";
@@ -65,19 +61,13 @@ function updateCounts() {
   outputCount.textContent = `${linesFrom(output.value).length} lines`;
 }
 
-function linesFrom(text) {
-  return text
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0);
-}
-
 async function saveList() {
   status.textContent = "Saving...";
   const key = listKey.value;
   const domains = linesFrom(domainsEditor.value);
   const customIps = linesFrom(customIpsEditor.value);
   const cidr = linesFrom(cidrEditor.value);
+
   await Promise.all([
     fetch("/api/list", {
       method: "POST",
@@ -95,6 +85,7 @@ async function saveList() {
       body: JSON.stringify({ key, type: "cidr", lines: cidr }),
     }),
   ]);
+
   await fetch("/api/mask", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -108,6 +99,8 @@ async function runLookup() {
   output.value = "";
   errorList.innerHTML = "";
   errorBox.hidden = true;
+  progressBar.classList.add("active");
+
   const key = listKey.value;
   const res = await fetch("/api/run", {
     method: "POST",
@@ -118,12 +111,25 @@ async function runLookup() {
       include_custom_ips: includeCustomIps.checked,
       include_cidr: includeCidr.checked,
       output_mode: outputMode.value,
+      mask_override: maskInput.value.trim(),
     }),
   });
+
   const data = await res.json();
-  lastFullLines = data.full_lines || data.lines || [];
+  if (data.domains && data.resolved_ips) {
+    lastData = {
+      domains: data.domains || [],
+      resolvedIps: data.resolved_ips || [],
+      customIps: data.custom_ips || [],
+      cidr: data.cidr || [],
+    };
+  } else {
+    lastData = null;
+  }
+  lastOutputLines = data.lines || [];
   lastErrors = data.errors || [];
   renderOutput();
+
   if (lastErrors.length > 0) {
     lastErrors.forEach((domain) => {
       const li = document.createElement("li");
@@ -132,27 +138,55 @@ async function runLookup() {
     });
     errorBox.hidden = false;
   }
+
   updateCounts();
   status.textContent = "Completed";
+  progressBar.classList.remove("active");
 }
 
 async function loadLastOutput() {
   const key = listKey.value;
   const res = await fetch(`/api/last-output?key=${key}`);
   const data = await res.json();
-  lastFullLines = data.lines || [];
+  lastOutputLines = data.lines || [];
   lastErrors = [];
+  lastData = null;
   renderOutput();
 }
 
-async function renderOutput() {
-  const key = listKey.value;
-  const domains = await fetchDomainSet(key);
-  if (outputMode.value === "ips_only") {
-    output.value = lastFullLines.filter((line) => !domains.has(line)).join("\n");
-  } else {
-    output.value = lastFullLines.join("\n");
+function renderOutput() {
+  if (!lastData) {
+    output.value = lastOutputLines.join("\n");
+    updateCounts();
+    return;
   }
+
+  const mask = (maskInput.value || "30").trim();
+  const lines = [];
+  const seen = new Set();
+
+  const addLine = (line) => {
+    if (seen.has(line)) return;
+    seen.add(line);
+    lines.push(line);
+  };
+
+  if (includeDomains.checked) {
+    if (outputMode.value === "both") {
+      lastData.domains.forEach(addLine);
+    }
+    lastData.resolvedIps.forEach((ip) => addLine(`${ip}/${mask}`));
+  }
+
+  if (includeCustomIps.checked) {
+    lastData.customIps.forEach((ip) => addLine(`${ip}/${mask}`));
+  }
+
+  if (includeCidr.checked) {
+    lastData.cidr.forEach(addLine);
+  }
+
+  output.value = lines.join("\n");
   updateCounts();
 }
 
@@ -163,16 +197,23 @@ async function copyOutput() {
 
 listKey.addEventListener("change", fetchList);
 listType.addEventListener("change", fetchList);
-domainsEditor.addEventListener("input", updateCounts);
-customIpsEditor.addEventListener("input", updateCounts);
-cidrEditor.addEventListener("input", updateCounts);
+
+[domainsEditor, customIpsEditor, cidrEditor].forEach((el) =>
+  el.addEventListener("input", updateCounts)
+);
+
 output.addEventListener("input", updateCounts);
+maskInput.addEventListener("input", renderOutput);
+includeDomains.addEventListener("change", renderOutput);
+includeCustomIps.addEventListener("change", renderOutput);
+includeCidr.addEventListener("change", renderOutput);
+outputMode.addEventListener("change", renderOutput);
+
 themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("dark");
   const isDark = document.body.classList.contains("dark");
   themeToggle.textContent = isDark ? "Dark" : "Light";
 });
-outputMode.addEventListener("change", renderOutput);
 
 document.getElementById("loadBtn").addEventListener("click", fetchList);
 document.getElementById("saveBtn").addEventListener("click", saveList);

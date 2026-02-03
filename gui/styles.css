@@ -278,6 +278,36 @@ button.small {
   flex-wrap: wrap;
 }
 
+.progress {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin: 8px 0 14px;
+  display: none;
+}
+
+.progress.active {
+  display: block;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(120deg, #f59e0b, #f97316);
+  animation: progress-slide 1.2s ease-in-out infinite;
+}
+
+@keyframes progress-slide {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
 .error-list {
   margin-top: 16px;
   padding: 12px;

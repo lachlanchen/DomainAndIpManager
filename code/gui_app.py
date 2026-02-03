@@ -32,8 +32,11 @@ def run_lookup(
     include_custom_ips: bool,
     include_cidr: bool,
     output_mode: str,
-) -> tuple[list[str], list[str], list[str]]:
-    mask = load_mask(list_key, DEFAULT_MASKS.get(list_key, "32"))
+    mask_override: str | None,
+) -> tuple[list[str], list[str], list[str], list[str], list[str], list[str]]:
+    mask = (mask_override or "").strip() or load_mask(
+        list_key, DEFAULT_MASKS.get(list_key, "32")
+    )
     domains, custom_ips, cidr = load_lists(list_key)
     domains = unique_preserve(domains)
 
@@ -50,6 +53,7 @@ def run_lookup(
 
     results: List[str] = []
     errors: List[str] = []
+    resolved_ips: List[str] = []
     include_domain_ips = include_domains
     include_domain_names = include_domains
 
@@ -62,6 +66,7 @@ def run_lookup(
                 if not ips:
                     errors.append(domain)
                     continue
+                resolved_ips.extend(ips)
                 results.extend([ip + f"/{mask}" for ip in ips])
 
     if include_custom_ips:
@@ -72,13 +77,19 @@ def run_lookup(
 
     seen = set()
     output_lines = [x for x in results if not (x in seen or seen.add(x) or x.startswith("No"))]
-    full_lines = output_lines
     domain_set = set(domains)
     if output_mode == "ips_only":
-        output_lines = [line for line in full_lines if line not in domain_set]
+        output_lines = [line for line in output_lines if line not in domain_set]
 
     write_output(output_lines, f"gui_{list_key}")
-    return full_lines, output_lines, sorted(set(errors))
+    return (
+        output_lines,
+        sorted(set(errors)),
+        domains,
+        resolved_ips,
+        custom_ips,
+        cidr,
+    )
 
 
 @app.get("/")
@@ -135,10 +146,25 @@ def api_run():
     include_custom_ips = bool(payload.get("include_custom_ips", False))
     include_cidr = bool(payload.get("include_cidr", False))
     output_mode = payload.get("output_mode", "both")
-    full_lines, output_lines, errors = run_lookup(
-        list_key, include_domains, include_custom_ips, include_cidr, output_mode
+    mask_override = payload.get("mask_override")
+    output_lines, errors, domains, resolved_ips, custom_ips, cidr = run_lookup(
+        list_key,
+        include_domains,
+        include_custom_ips,
+        include_cidr,
+        output_mode,
+        mask_override,
     )
-    return jsonify({"lines": output_lines, "full_lines": full_lines, "errors": errors})
+    return jsonify(
+        {
+            "lines": output_lines,
+            "errors": errors,
+            "domains": domains,
+            "resolved_ips": resolved_ips,
+            "custom_ips": custom_ips,
+            "cidr": cidr,
+        }
+    )
 
 
 @app.get("/api/last-output")
