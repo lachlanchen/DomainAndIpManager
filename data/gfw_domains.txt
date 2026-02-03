@@ -63,7 +63,6 @@ play.googleapis.com
 clients3.google.com
 www.google.com.sg
 www.gstatic.com
-clients3.google.com
 yt3.googleusercontent.com
 # YouTube
 youtube.com
@@ -74,13 +73,9 @@ youtube-nocookie.com
 ytimg.com
 i.ytimg.com
 googlevideo.com
-youtube.googleapis.com
-youtubei.googleapis.com
 
 yt3.ggpht.com
 ggpht.com
-googleusercontent.com
-googleapis.com
 s.youtube.com
 redirector.googlevideo.com
 rr1---sn-jhi3-i3b6.googlevideo.com
@@ -98,7 +93,6 @@ rr2---sn-i5goxu-i3bl.googlevideo.com
 rr2---sn-npoldnel.googlevideo.com
 rr3---sn-jhi3-i3bd.googlevideo.com
 rr3---sn-i5goxu-i3bl.googlevideo.com
-yt3.googleusercontent.com
 # Meta (Facebook/Instagram/WhatsApp)
 facebook.com
 www.facebook.com
@@ -211,35 +205,17 @@ inappcheck.itunes.apple.com
 app-analytics-services.com
 
 # YouTube traffic (ordered)
-redirector.googlevideo.com
-oauth2.googleapis.com
-googleads.g.doubleclick.net
-accounts.google.com
 rr4---sn-ajab55-55.googlevideo.com
 rr3---sn-ajab55-55.googlevideo.com
 rr1---sn-ajab55-55.googlevideo.com
 r5---sn-ojun55-55.googlevideo.com
 rr2---sn-ajab55-55.googlevideo.com
-rr2---sn-jhi3-i3bk.googlevideo.com
-rr1---sn-jhi3-i3bk.googlevideo.com
-g.doubleclick.net
 rr1---sn-nx57ynsz.googlevideo.com
-lh3.googleusercontent.com
-www.googleapis.com
 rr1---sn-ab5l6nry.googlevideo.com
-rr1---sn-jhi3-i3b6.googlevideo.com
-rr1---sn-jhi3-i3bd.googlevideo.com
-rr3---sn-jhi3-i3bd.googlevideo.com
-inappcheck.itunes.apple.com
-people-pa.googleapis.com
-rr1---sn-jhi3-i3bz.googlevideo.com
 rr2---sn-jhi3-i3bz.googlevideo.com
 rr5---sn-ab5l6nrl.googlevideo.com
-growth-pa.googleapis.com
-rr3---sn-i5goxu-i3bl.googlevideo.com
 rr5---sn-ab5sznzk.googlevideo.com
 i9.ytimg.com
-rr2---sn-jhi3-i3bs.googlevideo.com
 pa.googleapis.com
 r2---sn-a5meknde.googlevideo.com
 p5is.googlevideo.com
@@ -280,9 +256,6 @@ rr5---sn-nx57ynsl.googlevideo.com
 rr5---sn-nx57ynsy.googlevideo.com
 rr5---sn-nx57ynze.googlevideo.com
 rr5---sn-vgqsrnsd.googlevideo.com
-rr2---sn-i5goxu-i3bl.googlevideo.com
-rr1---sn-i5goxu-i3bl.googlevideo.com
-www.google.cn
 rr1---sn-ab5szn67.googlevideo.com
 rr2---sn-ab5l6nk6.googlevideo.com
 rr3---sn-ab5l6ny7.googlevideo.com
@@ -303,7 +276,6 @@ rr4---sn-ab5sznly.googlevideo.com
 rr5---sn-20ab55-5i.googlevideo.com
 rr5---sn-ab5l6nkd.googlevideo.com
 rr1---sn-ab5sznly.googlevideo.com
-yt3.googleusercontent.com
 encrypted-tbn1.gstatic.com
 rr1---sn-ab5l6ny7.googlevideo.com
 l6ny7.googlevideo.com
@@ -313,7 +285,6 @@ rr4---sn-20ab55-5i.googlevideo.com
 rr5---sn-ab5l6ndy.googlevideo.com
 rr5---sn-ab5l6nrz.googlevideo.com
 rr1---sn-ab5sznzy.googlevideo.com
-fonts.gstatic.com
 rr2---sn-a5meknsd.googlevideo.com
 rr2---sn-ab5l6nkd.googlevideo.com
 rr2---sn-ab5l6ny7.googlevideo.com
@@ -322,7 +293,6 @@ rr4---sn-ab5l6nrk.googlevideo.com
 rr5---sn-ab5sznzl.googlevideo.com
 rr5---sn-ab5sznzr.googlevideo.com
 rr5---sn-ab5sznzy.googlevideo.com
-clients3.google.com
 r3---sn-tn.googlevideo.com
 rr1---sn-20ab55-5i.googlevideo.com
 l6nrz.googlevideo.com
@@ -338,8 +308,6 @@ rr4---sn-ab5l6ny7.googlevideo.com
 rr5---sn-ab5l6nr6.googlevideo.com
 rr5---sn-ab5l6ny7.googlevideo.com
 rr5---sn-ab5sznzd.googlevideo.com
-www.google.com.sg
-play.google.com
 r4---sn-tn.googlevideo.com
 7inld.googlevideo.com
 rr2---sn-ab5szn67.googlevideo.com
@@ -373,8 +341,6 @@ rr2---sn-ab5l6nrr.googlevideo.com
 rr2---sn-ab5l6nrz.googlevideo.com
 rr2---sn-ab5sznzl.googlevideo.com
 rr2---sn-ab5sznzr.googlevideo.com
-rr2---sn-i3belnll.googlevideo.com
-rr2---sn-npoldnel.googlevideo.com
 rr2---sn-nx57ynsd.googlevideo.com
 rr2---sn-nx57ynz7.googlevideo.com
 rr3---sn-a5meknds.googlevideo.com
@@ -469,7 +435,6 @@ rr5---sn-i3belne6.googlevideo.com
 rr5---sn-nx57ynz7.googlevideo.com
 rr5---sn-vgqsknze.googlevideo.com
 rr5---sn-vgqsrnek.googlevideo.com
-clients2.google.com
 r1---sn-a5mekn6d.googlevideo.com
 r1---sn-a5mekn6k.googlevideo.com
 q4fk.googlevideo.com
@@ -547,20 +512,7 @@ rr5---sn-ab5l6ndr.googlevideo.com
 rr5---sn-ab5l6nk6.googlevideo.com
 rr5---sn-ab5l6nrd.googlevideo.com
 rr6---sn-ab5l6ndr.googlevideo.com
-youtubei.googleapis.com
-s.youtube.com
-www.youtube.com
-www.google.com
-app-analytics-services.com
-notifications-pa.googleapis.com
-oauthaccountmanager.googleapis.com
-yt3.ggpht.com
 suggestqueries.google.com
-play.googleapis.com
-www.google.com.hk
-www.gstatic.com
-rr2---sn-jhi3-i3b6.googlevideo.com
-rr2---sn-jhi3-i3bd.googlevideo.com
 rr1---sn-ab5l6nrz.googlevideo.com
 rr1---sn-a5msenle.googlevideo.com
 rr3---sn-ab5l6ndr.googlevideo.com
