@@ -1,0 +1,8 @@
+.DS_Store
+.venv/
+__pycache__/
+
+# traffic videos/frames
+traffics/*.MP4
+traffics/*.mp4
+traffics/frames*/
