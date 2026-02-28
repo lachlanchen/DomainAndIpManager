@@ -1,58 +1,200 @@
 [English](../README.md) · [العربية](README.ar.md) · [Español](README.es.md) · [Français](README.fr.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [中文 (简体)](README.zh-Hans.md) · [中文（繁體）](README.zh-Hant.md) · [Deutsch](README.de.md) · [Русский](README.ru.md)
 
 
+[![LazyingArt banner](https://github.com/lachlanchen/lachlanchen/raw/main/figs/banner.png)](https://github.com/lachlanchen/lachlanchen/blob/main/figs/banner.png)
+
 # DomainAndIpManager
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-2.3%2B-000000?logo=flask&logoColor=white)
 ![dnspython](https://img.shields.io/badge/dnspython-2.4%2B-2A6DB0)
-![Platform](https://img.shields.io/badge/Platform-CLI%20%2B%20GUI-0A7B83)
-![Status](https://img.shields.io/badge/Project-Active-2ea44f)
+![Mode](https://img.shields.io/badge/Mode-CLI%20%2F%20GUI-1f6feb)
 ![Data](https://img.shields.io/badge/Data%20Sets-6-orange)
+![Status](https://img.shields.io/badge/Project-Active-2ea44f)
+![Locale](https://img.shields.io/badge/Docs-English%20%7C%209%20More-0ea5e9?logo=googletranslate&logoColor=white)
+![License](https://img.shields.io/badge/License-Not%20Included-9ca3af)
 
-AI 및 GFW 컨텍스트의 도메인/IP 목록을 관리하고, DNS 조회를 실행하며, 타임스탬프가 포함된 결과를 내보내는 도구입니다. CLI 스크립트와 GUI 편집기를 모두 포함합니다.
+도메인/IP/CIDR 목록을 선별적으로 관리하고, DNS 해석을 통해 결정론적 IP 블록으로 변환한 뒤 정렬·중복 제거하여 라우팅 및 필터링 워크플로에서 재현 가능한 스냅샷으로 내보내는 Python 툴킷입니다.
 
-## 🚀 개요
-
-DomainAndIpManager는 다음을 위한 Python 툴킷입니다:
-- 여러 목록 세트 유지 관리(`ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default`).
-- 도메인 `A` 레코드 조회 후 `IP/mask` 항목으로 변환.
-- 도메인에서 파생된 IP와 사용자 정의 IP/CIDR 소스 결합.
-- 후속 네트워크/라우팅 워크플로를 위한 결정론적(deterministic) 타임스탬프 출력 파일 내보내기.
-
-다음 두 방식을 모두 지원합니다:
-- `code/nslookup*.py` 및 정렬 유틸리티 기반 CLI 워크플로.
-- 목록 편집과 조회를 대화형으로 수행하는 Flask 기반 웹 GUI(`code/gui_app.py` + `gui/*`).
-
-### 한눈에 보기
-
-| 영역 | 제공 내용 |
+| Focus | Details |
 |---|---|
-| 목록 세트 | `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default` |
-| 인터페이스 | CLI 스크립트 + Flask GUI |
-| 출력 형식 | 타임스탬프 텍스트 스냅샷 + 정렬된 TXT/JSON |
-| 주요 워크플로 | 목록 편집 → 도메인 조회 → 사용자 정의 범위 결합 → 내보내기 |
-| 선택 도우미 | `traffics/`의 YouTube 트래픽 OCR 추출 |
+| Domain sets | `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default` |
+| Core workflows | DNS resolution, deterministic merging, normalization, export |
+| Output artifacts | Timestamped TXT plus JSON snapshots in `output/` |
+| Interfaces | CLI scripts + Flask GUI (`code/gui_app.py`, served locally) |
+| Data format | Line-based domain/IP/CIDR text files in `data/` |
 
-## 🎬 데모
+---
 
-![Domain & IP Manager demo](demos/demo.png)
+## 🧭 Table of Contents
 
-## ✨ 기능
+- [Overview](#-overview)
+- [Features](#-features)
+- [Project Structure](#-project-structure)
+- [Prerequisites](#-prerequisites)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Configuration](#-configuration)
+- [Scripts & Workflow Map](#-scripts--workflow-map)
+- [Examples](#-examples)
+- [Development Notes](#-development-notes)
+- [Troubleshooting](#-troubleshooting)
+- [Roadmap](#-roadmap)
+- [Contributing](#-contributing)
+- [Support](#️-support)
+- [Contact](#-contact)
+- [License](#-license)
 
-- 멀티 목록 세트 워크플로: `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default`.
-- 저장/불러오기/실행/복사 흐름을 갖춘 GUI 목록 편집기.
-- 도메인, 사용자 정의 IP, CIDR 블록의 선택적 포함 제어.
-- 출력 모드 전환: `Domains + IPs` 또는 `IPs only`.
-- GUI에서 실패한 조회 결과 보고.
-- `output/` 아래 타임스탬프 출력 스냅샷.
-- 혼합 도메인/IP 입력을 TXT/JSON으로 중복 제거 및 정렬하는 유틸리티.
-- `traffics/` 아래 선택적 트래픽 OCR 도우미(YouTube 중심 추출).
+## 🗂️ At a Glance
 
-## 🗂️ 프로젝트 구조
+| Area | Details |
+|---|---|
+| Domain sets | `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default` |
+| Core workflows | DNS resolve + merge, dedupe/sort, GUI editing, snapshot export |
+| Output formats | TXT + JSON |
+| Primary output directory | `output/` |
+| Primary entrypoints | CLI scripts under `code/`, Flask GUI in `gui_app.py` |
+
+## 🚀 Overview
+
+DomainAndIpManager는 반복 가능한 목록 생성을 위해 설계되었습니다.
+
+- `data/`에서 관리 영역별로 리스트 세트를 분리해 둡니다. (domains + custom IPs + CIDR + mask 파일)
+- 도메인 이름을 IP로 해석하고 CIDR 스타일 항목으로 변환합니다.
+- 해석된 항목을 사용자 지정/큐레이션 네트워크 블록과 병합합니다.
+- 안정적인 순서의 TXT와 JSON 결과물을 내보내며, 필요 시 타임스탬프가 붙은 스냅샷도 생성합니다.
+- CLI로 실행하거나 웹 GUI를 통해 인터랙티브 편집/재생성을 수행합니다.
+
+## ✨ Features
+
+| Area | Details |
+|---|---|
+| Multi-list profiles | 전략별 라우팅용으로 `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default`를 각각 분리 관리 |
+| DNS resolution | `code/nslookup*.py` 스크립트로 domain → IP 블록 확장 |
+| Sorting / de-duplication | `code/unique_sort*.py`가 domain/IP/CIDR 혼합 입력을 정규화하고 중복 제거 수행 |
+| Deterministic export | 안정적인 정렬 순서의 TXT + JSON 출력, 필요 시 타임스탬프 스냅샷 생성 |
+| GUI editing | `gui/`에서 `domains`, `custom_ips`, `cidr`, mask 설정을 대화형으로 편집 |
+| Diagnostics | DNS 실패 보고(옵션)로 트러블슈팅 지원 |
+| Optional OCR utility | YouTube/비디오 추출 워크플로를 위한 `traffics/` OCR 헬퍼 |
+
+---
+
+## ✅ Prerequisites
+
+| Requirement | Notes |
+|---|---|
+| Python | 3.10+ (권장) |
+| Network | DNS 조회를 위한 인터넷 연결 |
+| Python packages | `pip` 및 `requirements.txt`의 종속성 |
+| Git | 리포지토리 클론/업데이트에 필요 |
+| OCR optional stack | 트래픽 추출 유틸리티 사용 시 `ffmpeg` + `tesseract` |
+
+---
+
+## 📦 Installation
+
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+빠른 설정:
+
+```bash
+git clone <your-fork-or-this-repo-url>
+cd DomainAndIpManager
+python3 -m pip install -r requirements.txt
+```
+
+> 가정: 직접 CLI로 사용할 때는 별도의 가상환경 부트스트랩이 필수는 아닙니다. 선호하는 경우 `start_gui.sh`가 `.venv`를 자동 생성해 사용할 수 있습니다.
+
+## 🧭 Usage
+
+### GUI
+
+```bash
+./start_gui.sh
+```
+
+`start_gui.sh`는 `code/gui_app.py`를 실행하고 아래 기능을 제공합니다.
+
+- URL: `http://127.0.0.1:5000`
+- 리스트 파일 편집용 GUI 기반 인터페이스
+- 필요 시 생성하고 바로 복사 가능한 미리보기 출력
+- 필요한 경우 `.venv`를 자동 생성하고 의존성 install/update 수행
+
+직접 실행도 가능합니다.
+
+```bash
+python3 code/gui_app.py
+```
+
+### CLI Reference
+
+| Common task | Command |
+|---|---|
+| AI 중심 도메인 해석 | `python3 code/nslookup_simplified.py` |
+| GFW 중심 도메인 해석 | `python3 code/nslookup_simplified_gfw.py` |
+| GFW + AI 통합 도메인 해석 | `python3 code/nslookup_simplified_gfw_w_ai.py` |
+| GFW에서 AI를 제외한 해석 | `python3 code/nslookup_simplified_gfw_wo_ai.py` |
+| 기본 리졸버 경로 실행 | `python3 code/nslookup.py` |
+| 목록을 정렬해 JSON으로 저장 | `python3 code/unique_sort.py -i domain_and_ips.txt -o output/domain_and_ips_unique_sorted.json` |
+| 표준 TXT/JSON 내보내기 | `python3 code/unique_sort_print.py` |
+
+참고:
+
+- 출력 파일은 `output/<script>_YYYYMMDD_HHMMSS.txt` 형식으로 타임스탬프 접미사를 붙여 저장됩니다.
+- 정렬 스크립트는 `-i`/`-o` 플래그로 커스텀 입력/출력 경로를 지원합니다.
+
+### Optional OCR Utility
+
+```bash
+python3 traffics/extract_youtube_traffic.py \
+  --videos "traffics/ScreenRecording_02-03-2026 07-34-48_1.MP4" \
+           "traffics/ScreenRecording_02-03-2026 07-36-29_1.MP4"
+```
+
+`PATH`에 `ffmpeg`와 `tesseract`가 있어야 합니다.
+
+## ⚙️ Configuration
+
+- 모든 `data/` 텍스트 파일은 한 줄에 하나의 항목만 담습니다.
+- 현재 공유 리스트 로더 로직은 `#`로 시작하는 주석 줄을 무시합니다.
+- 리스트별 마스크는 `data/<set>_mask.txt`에 저장됩니다.
+- 현재 체크인된 마스크 값은 `data/*_mask.txt` 내용에 따라 결정됩니다.
+- 입력은 쓰기 전에 결정론적으로 중복 제거된 순서로 정렬됩니다.
+
+### List Set Matrix
+
+| List set | Domains file | Custom IPs file | CIDR file | Mask file |
+|---|---|---|---|---|
+| `ai` | `data/ai_domains.txt` | `data/ai_custom_ips.txt` | `data/ai_cidr.txt` | `data/ai_mask.txt` |
+| `gfw` | `data/gfw_domains.txt` | `data/gfw_custom_ips.txt` | `data/gfw_cidr.txt` | `data/gfw_mask.txt` |
+| `ai_gfw` | `data/ai_gfw_domains.txt` | `data/ai_gfw_custom_ips.txt` | `data/ai_gfw_cidr.txt` | `data/ai_gfw_mask.txt` |
+| `gfw_wo_ai` | `data/gfw_wo_ai_domains.txt` | `data/gfw_wo_ai_custom_ips.txt` | `data/gfw_wo_ai_cidr.txt` | `data/gfw_wo_ai_mask.txt` |
+| `non_gfw` | `data/non_gfw_domains.txt` | `data/non_gfw_custom_ips.txt` | `data/non_gfw_cidr.txt` | `data/non_gfw_mask.txt` |
+| `default` | `data/default_domains.txt` | `data/default_custom_ips.txt` | `data/default_cidr.txt` | `data/default_mask.txt` |
+
+## 🧰 Script & Workflow Map
+
+| Script | Purpose |
+|---|---|
+| `code/nslookup.py` | 기본 domain/IP 해석 실행기 |
+| `code/nslookup_simplified.py` | AI 중심 해석 + CIDR 내보내기 |
+| `code/nslookup_simplified_gfw.py` | GFW 중심 해석 |
+| `code/nslookup_simplified_gfw_w_ai.py` | GFW + AI 통합 해석 |
+| `code/nslookup_simplified_gfw_wo_ai.py` | AI를 제외한 GFW 해석 |
+| `code/unique_sort.py` | 정규화 + 중복 제거 + JSON 출력 |
+| `code/unique_sort_print.py` | TXT/JSON 표준 아티팩트 출력 및 저장 |
+| `code/list_utils.py` | 공통 로더, 마스크, 목록 유틸리티 |
+| `code/gui_app.py` | Flask GUI 백엔드 |
+| `traffics/extract_youtube_traffic.py` | 트래픽 추출용 OCR 보조 도구 |
+| `start_gui.sh` | 가상환경 부트스트랩 + 의존성 설치 + 서버 시작 |
+
+## 🗂️ Project Structure
 
 ```text
 DomainAndIpManager/
+├── AGENTS.md
 ├── README.md
 ├── requirements.txt
 ├── start_gui.sh
@@ -71,105 +213,30 @@ DomainAndIpManager/
 │   ├── app.js
 │   └── styles.css
 ├── data/
-│   ├── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_domains.txt
-│   ├── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_custom_ips.txt
-│   ├── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_cidr.txt
-│   └── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_mask.txt
+│   ├── *_domains.txt
+│   ├── *_custom_ips.txt
+│   ├── *_cidr.txt
+│   └── *_mask.txt
 ├── output/
 ├── demos/
+│   └── demo.png
 ├── figs/
+│   └── banner.png
 ├── traffics/
-└── i18n/
+│   └── extract_youtube_traffic.py
+├── i18n/
+│   └── localized README.md variants
+└── .github/
+    └── FUNDING.yml
 ```
 
-## ✅ 사전 요구사항
+## 🎬 Demo
 
-- Python `3.10+` (권장; 코드에서 최신 타입 문법 사용).
-- `pip`.
-- DNS 질의를 위한 네트워크 연결.
-- OCR 도우미(선택): `PATH`에 `ffmpeg`, `tesseract` 바이너리 필요.
+![Domain & IP Manager demo](demos/demo.png)
 
-## 📦 설치
+## 🧾 Data Files
 
-```bash
-git clone <your-fork-or-this-repo-url>
-cd DomainAndIpManager
-pip install -r requirements.txt
-```
-
-의존성 설치:
-
-```bash
-pip install -r requirements.txt
-```
-
-## 🖥️ 빠른 시작 (GUI)
-
-```bash
-./start_gui.sh
-```
-
-`http://127.0.0.1:5000`을 여세요.
-
-참고:
-- `start_gui.sh`는 `.venv`를 부트스트랩하고, `requirements.txt` 변경 시 의존성을 설치한 뒤 `code/gui_app.py`를 실행합니다.
-- `python3 code/gui_app.py`로 직접 실행할 수도 있습니다.
-
-## 🧭 사용법
-
-### GUI 사용
-
-1. 목록 세트를 선택합니다(`AI + GFW`, `AI`, `GFW`, `GFW (No AI)`, `Non-GFW (China)`, `Default`).
-2. `Domains`, `Custom IPs`, `CIDR` 텍스트 영역을 편집합니다.
-3. `Mask`와 출력 모드(`Domains + IPs` 또는 `IPs only`)를 설정합니다.
-4. `Save`를 눌러 `data/*.txt`에 변경사항을 저장합니다.
-5. `Run`을 눌러 조회를 실행하고 출력을 생성합니다.
-6. `Copy`를 눌러 현재 출력을 복사합니다.
-
-### CLI 사용
-
-```bash
-python3 code/nslookup_simplified.py
-python3 code/nslookup_simplified_gfw.py
-python3 code/nslookup_simplified_gfw_w_ai.py
-python3 code/nslookup_simplified_gfw_wo_ai.py
-python3 code/nslookup.py
-```
-
-각 스크립트는 결과를 터미널에 출력하고 `output/<script>_YYYYMMDD_HHMMSS.txt`를 작성합니다.
-
-### 정렬 및 정규화 도구
-
-```bash
-python3 code/unique_sort.py -i domain_and_ips.txt -o output/domain_and_ips_unique_sorted.json
-python3 code/unique_sort_print.py
-```
-
-- `unique_sort.py`는 사용자 지정 입력/출력 플래그를 지원하며 JSON을 작성합니다.
-- `unique_sort_print.py`는 정렬된 도메인/IP를 출력하고 `output/`에 TXT와 JSON을 모두 작성합니다.
-- 저장소 루트에 `domain_and_ips.txt`가 없다면 `unique_sort.py`에 `-i <path>`를 사용하거나 파일을 생성하세요.
-
-### 선택적 트래픽 추출 도우미
-
-```bash
-python3 traffics/extract_youtube_traffic.py \
-  --videos "traffics/ScreenRecording_02-03-2026 07-34-48_1.MP4" \
-           "traffics/ScreenRecording_02-03-2026 07-36-29_1.MP4"
-```
-
-이 도우미는 `traffics/`에 OCR 기반 도메인/IP 마크다운 리포트를 생성하며, 외부 도구(`ffmpeg`, `tesseract`)가 필요합니다.
-
-## 🧾 데이터 파일
-
-목록은 한 줄당 하나의 항목으로 `data/` 아래에 저장됩니다:
-- AI 전용 목록은 `ai_*`
-- GFW 목록은 `gfw_*`
-- 결합 목록은 `ai_gfw_*`
-- AI 제외 GFW 목록은 `gfw_wo_ai_*`
-- 중국에서 접근 가능한(non-GFW) 목록은 `non_gfw_*`
-- 레거시/기본 목록은 `default_*`
-
-예시:
+data 파일은 `data/`에 줄 단위 텍스트로 저장됩니다.
 
 ```text
 data/ai_domains.txt
@@ -178,114 +245,77 @@ data/ai_cidr.txt
 data/ai_mask.txt
 ```
 
-### 목록 세트 매트릭스
+동일한 파일명 규칙이 `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default`에도 적용됩니다.
 
-| List set | Domains file | Custom IPs file | CIDR file | Mask file |
-|---|---|---|---|---|
-| `ai` | `data/ai_domains.txt` | `data/ai_custom_ips.txt` | `data/ai_cidr.txt` | `data/ai_mask.txt` |
-| `gfw` | `data/gfw_domains.txt` | `data/gfw_custom_ips.txt` | `data/gfw_cidr.txt` | `data/gfw_mask.txt` |
-| `ai_gfw` | `data/ai_gfw_domains.txt` | `data/ai_gfw_custom_ips.txt` | `data/ai_gfw_cidr.txt` | `data/ai_gfw_mask.txt` |
-| `gfw_wo_ai` | `data/gfw_wo_ai_domains.txt` | `data/gfw_wo_ai_custom_ips.txt` | `data/gfw_wo_ai_cidr.txt` | `data/gfw_wo_ai_mask.txt` |
-| `non_gfw` | `data/non_gfw_domains.txt` | `data/non_gfw_custom_ips.txt` | `data/non_gfw_cidr.txt` | `data/non_gfw_mask.txt` |
-| `default` | `data/default_domains.txt` | `data/default_custom_ips.txt` | `data/default_cidr.txt` | `data/default_mask.txt` |
+## 🧪 Examples
 
-## ⚙️ 구성
-
-- 각 목록 파일은 한 줄당 하나의 항목을 사용합니다.
-- `#`로 시작하는 줄은 공용 목록 로딩 로직에서 주석으로 처리되며 조회 실행 시 무시됩니다.
-- 마스크는 목록 세트별로 `data/<list>_mask.txt`에 저장됩니다.
-
-현재 저장소 상태:
-- 현재 제공되는 모든 mask 파일은 `30`을 포함합니다(`ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default`).
-
-이전 README 버전에서 유지된 참고 사항(호환성 문맥 보존):
-- `*_mask.txt`는 CIDR 마스크를 제어합니다(기본값 `32`, `default` 목록은 `24`).
-- 보충 설명: 현재 체크인된 데이터와 스크립트 기본값 기준으로, 재정의하지 않으면 실제 런타임 기본값은 `30`입니다.
-
-## 📤 출력
-
-- GUI + CLI: `output/<script or gui>_YYYYMMDD_HHMMSS.txt`
-- 정렬 도구: `output/domain_and_ips_unique_sorted.txt` 및 `.json`
-
-## 🧪 예시
-
-CLI 실행 예시:
+리졸버를 직접 한 번 실행해 보기:
 
 ```bash
-python3 code/nslookup_simplified_gfw_w_ai.py
+python3 code/nslookup_simplified_gfw.py
 ```
 
-일반적인 출력 형태:
+일반적인 출력 예:
 
 ```text
-<domain.example>
-<resolved-ip>/30
-<custom-ip>/30
-<cidr-block>
+domain.example.com
+198.51.100.12/30
+203.0.113.44/30
+203.0.113.0/24
 ```
 
-사용자 지정 JSON 정규화 예시:
+사용자 입력 파일을 JSON으로 정렬:
 
 ```bash
 python3 code/unique_sort.py -i ./my_list.txt -o ./output/my_list_unique_sorted.json
 ```
 
-## 🛠️ 개발 노트
+## 🧪 Development Notes
 
-- 코드 스타일: Python 3, PEP 8, 4칸 들여쓰기, `snake_case` 네이밍.
-- 스크립트는 의도적으로 CLI 친화적이며 대부분 단일 목적입니다.
-- 현재 여러 `nslookup` 변형은 목록 키 매핑만 다르고 거의 동일한 로직을 공유합니다.
-- 이 저장소에는 현재 자동화된 테스트가 없습니다.
+- 공유 로더 및 해석기 도우미 로직은 `code/list_utils.py`에 있습니다.
+- 출력 writer는 재현 가능한 산출물을 위해 결정론적 순서를 사용합니다.
+- 현재 이 저장소에는 자동 테스트 프레임워크가 없습니다.
+- `setup.py` / `pyproject.toml`은 없습니다. 스크립트 우선 구조입니다.
+- `.github/FUNDING.yml`과 `figs/*` 자산은 기부/후원 연동 정보를 나타냅니다.
 
-## 🧯 문제 해결
+## 🧯 Troubleshooting
 
-- `Input file not found: domain_and_ips.txt`:
-  - `code/unique_sort.py`에 `-i <input-file>`를 제공하거나 저장소 루트에 `domain_and_ips.txt`를 생성하세요.
-- GUI가 자동으로 열리지 않을 때:
-  - 시작 후 `http://127.0.0.1:5000`을 수동으로 여세요.
-- 일부 도메인에서 DNS 결과가 비어 있을 때:
-  - 네트워크/DNS 사용 가능 여부를 확인하세요. 조회 실패 도메인은 GUI의 `Failed Lookups`에 표시됩니다.
-- 의존성 누락:
-  - `pip install -r requirements.txt`를 실행하세요.
-- OCR 도우미가 명령 누락으로 실패할 때:
-  - `ffmpeg`와 `tesseract`를 설치하고 둘 다 `PATH`에 포함되었는지 확인하세요.
+- `Input file not found: domain_and_ips.txt`
+  - 유효한 경로로 `python3 code/unique_sort.py -i <path> -o <path>`를 실행하거나, 리포지토리 루트에 `domain_and_ips.txt`가 있는지 확인하세요.
+- DNS 조회 시간 초과 또는 실패
+  - 네트워크 연결 및 DNS 접속을 확인한 뒤 다시 실행하세요.
+- GUI가 5000 포트에서 시작되지 않음
+  - `flask`가 설치되어 있고 `127.0.0.1:5000` 포트를 사용하는 프로세스가 없는지 확인하세요.
+- OCR 유틸리티 오류
+  - `PATH`에서 `ffmpeg`와 `tesseract`가 설치되고 접근 가능한지 확인하세요.
 
-## 🗺️ 로드맵
+## 🗺️ Roadmap
 
-- 파싱, 정렬, 조회 엣지 케이스에 대한 자동화 테스트 추가.
-- 공유 파라미터형 실행기로 `nslookup` 변형 간 중복 로직 축소.
-- `i18n/` 하위의 다국어 문서 확장.
-- 린트 및 스모크 테스트용 선택적 CI 검사 추가.
+- 파싱, 마스크 적용, 정규화 유틸리티에 대한 단위 테스트 추가.
+- 모든 스크립트 및 공통 플래그에 대한 명확한 CLI 도움말 추가.
+- Python 의존성에 대한 lockfile/재현 가능한 환경 정의 제공.
+- GUI에서 DNS 실패 목록 및 병합 결과 diff 미리보기 지표 추가.
 
-## 🤝 기여
+## 🤝 Contributing
 
-기여를 환영합니다.
+기여는 환영합니다. 권장 workflow:
 
-권장 워크플로:
-1. 변경용 브랜치를 생성합니다.
-2. 커밋은 집중도 높게 유지하고 명령형으로 작성합니다(예: `Limit domain list to ChatGPT, Claude, and Google AI`).
-3. 생성 데이터 동작을 변경할 때는 명령 출력 샘플을 포함합니다.
-4. 간단한 요약과 의존성/런타임 참고사항을 포함해 PR을 엽니다.
+1. 문제 또는 기능 요청을 설명하는 이슈를 생성합니다.
+2. 변경은 작고 재현 가능하게 유지합니다.
+3. PR 설명에 예상 명령 사용법과 출력 변화 내용을 기록합니다.
+4. 동작이나 명령이 바뀌었을 때는 `README.md`를 업데이트합니다.
 
-## 📄 라이선스
+## ❤️ Support
 
-현재 저장소 루트에는 명시적인 `LICENSE` 파일이 없습니다. 이 프로젝트를 재배포하거나 재사용할 계획이라면 먼저 라이선스 조건을 추가하거나 확인하세요.
+| Donate | PayPal | Stripe |
+| --- | --- | --- |
+| [![Donate](https://camo.githubusercontent.com/24a4914f0b42c6f435f9e101621f1e52535b02c225764b2f6cc99416926004b7/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f446f6e6174652d4c617a79696e674172742d3045413545393f7374796c653d666f722d7468652d6261646765266c6f676f3d6b6f2d6669266c6f676f436f6c6f723d7768697465)](https://chat.lazying.art/donate) | [![PayPal](https://camo.githubusercontent.com/d0f57e8b016517a4b06961b24d0ca87d62fdba16e18bbdb6aba28e978dc0ea21/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f50617950616c2d526f6e677a686f754368656e2d3030343537433f7374796c653d666f722d7468652d6261646765266c6f676f3d70617970616c266c6f676f436f6c6f723d7768697465)](https://paypal.me/RongzhouChen) | [![Stripe](https://camo.githubusercontent.com/1152dfe04b6943afe3a8d2953676749603fb9f95e24088c92c97a01a897b4942/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f5374726970652d446f6e6174652d3633354246463f7374796c653d666f722d7468652d6261646765266c6f676f3d737472697065266c6f676f436f6c6f723d7768697465)](https://buy.stripe.com/aFadR8gIaflgfQV6T4fw400) |
 
-## 💖 후원
+## 📬 Contact
 
-후원 메타데이터는 `.github/FUNDING.yml`에서도 확인할 수 있습니다.
+- 버그 신고와 기능 요청은 GitHub issue로 남겨주세요.
+- 이슈에는 재현 단계, 기대 출력, 실행 명령 컨텍스트를 간결하게 적어주세요.
 
-- GitHub Sponsors: `https://github.com/sponsors/lachlanchen`
-- 프로젝트 링크: `https://lazying.art`, `https://chat.lazying.art`, `https://onlyideas.art`
+## 📄 License
 
-### 기부 QR (직접 후원하고 싶다면)
-
-| WeChat | Alipay |
-|---|---|
-| ![WeChat donation QR](figs/donate_wechat.png) | ![Alipay donation QR](figs/donate_alipay.png) |
-
-## 📝 참고
-
-- 데이터 파일은 한 줄당 하나의 항목을 사용합니다.
-- `*_mask.txt`는 CIDR 마스크를 제어합니다(기본값 `32`, `default` 목록은 `24`).
-- i18n 상태 참고: 이 저장소에는 `i18n/`이 존재하며, 로컬라이즈된 README 파일은 상단에 단일 언어 옵션 줄을 유지해야 합니다.
+현재 스냅샷에서는 저장소 루트에 `LICENSE` 파일이 추적되지 않습니다.

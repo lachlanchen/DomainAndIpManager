@@ -1,58 +1,200 @@
 [English](../README.md) · [العربية](README.ar.md) · [Español](README.es.md) · [Français](README.fr.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [中文 (简体)](README.zh-Hans.md) · [中文（繁體）](README.zh-Hant.md) · [Deutsch](README.de.md) · [Русский](README.ru.md)
 
 
+[![LazyingArt banner](https://github.com/lachlanchen/lachlanchen/raw/main/figs/banner.png)](https://github.com/lachlanchen/lachlanchen/blob/main/figs/banner.png)
+
 # DomainAndIpManager
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-2.3%2B-000000?logo=flask&logoColor=white)
 ![dnspython](https://img.shields.io/badge/dnspython-2.4%2B-2A6DB0)
-![Platform](https://img.shields.io/badge/Platform-CLI%20%2B%20GUI-0A7B83)
-![Status](https://img.shields.io/badge/Project-Active-2ea44f)
+![Mode](https://img.shields.io/badge/Mode-CLI%20%2F%20GUI-1f6feb)
 ![Data](https://img.shields.io/badge/Data%20Sets-6-orange)
+![Status](https://img.shields.io/badge/Project-Active-2ea44f)
+![Locale](https://img.shields.io/badge/Docs-English%20%7C%209%20More-0ea5e9?logo=googletranslate&logoColor=white)
+![License](https://img.shields.io/badge/License-Not%20Included-9ca3af)
 
-管理 AI 與 GFW 情境的網域/IP 清單、執行 DNS 查詢，並匯出帶時間戳記的輸出檔案。包含 CLI 腳本與 GUI 編輯器。
+這是個 Python 工具集，用來維護精選的 domain/IP/CIDR 清單集合，透過 DNS 解析產生可重複的 IP 區段、去重、並匯出可重現的快照，供路由與過濾流程使用。
 
-## 🚀 概覽
-
-DomainAndIpManager 是一套 Python 工具集，可用於：
-- 維護多組清單（`ai`、`gfw`、`ai_gfw`、`gfw_wo_ai`、`non_gfw`、`default`）。
-- 解析網域 `A` 記錄並轉換為 `IP/mask` 項目。
-- 將網域解析得到的 IP 與自訂 IP、CIDR 來源合併。
-- 匯出可重現、帶時間戳記的輸出檔，供後續網路/路由流程使用。
-
-同時支援：
-- `code/nslookup*.py` 與排序工具的 CLI 工作流。
-- 以 Flask 為基礎的 Web GUI（`code/gui_app.py` + `gui/*`），可互動式編輯清單並執行查詢。
-
-### 一覽
-
-| 區域 | 可獲得內容 |
+| Focus | Details |
 |---|---|
-| 清單集合 | `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default` |
-| 介面 | CLI 腳本 + Flask GUI |
-| 輸出形式 | 帶時間戳記的文字快照 + 排序後 TXT/JSON |
-| 主要流程 | 編輯清單 → 解析網域 → 合併自訂範圍 → 匯出 |
-| 可選輔助 | `traffics/` 下的 YouTube 流量 OCR 擷取 |
+| 清單集合 | `ai`、`gfw`、`ai_gfw`、`gfw_wo_ai`、`non_gfw`、`default` |
+| 核心流程 | DNS 解析、確定性合併、標準化、匯出 |
+| 輸出成果 | `output/` 中的時間戳 TXT 與 JSON 快照 |
+| 介面方式 | CLI 指令腳本 + Flask GUI（`code/gui_app.py`，本地啟動） |
+| 資料格式 | `data/` 目錄中的逐行 domain/IP/CIDR 純文字檔 |
 
-## 🎬 Demo
+---
 
-![Domain & IP Manager demo](demos/demo.png)
+## 🧭 Table of Contents
 
-## ✨ 功能
+- [Overview](#-overview)
+- [Features](#-features)
+- [Project Structure](#-project-structure)
+- [Prerequisites](#-prerequisites)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Configuration](#-configuration)
+- [Scripts & Workflow Map](#-scripts--workflow-map)
+- [Examples](#-examples)
+- [Development Notes](#-development-notes)
+- [Troubleshooting](#-troubleshooting)
+- [Roadmap](#-roadmap)
+- [Contributing](#-contributing)
+- [Support](#️-support)
+- [Contact](#-contact)
+- [License](#-license)
 
-- 多清單集合工作流：`ai`、`gfw`、`ai_gfw`、`gfw_wo_ai`、`non_gfw`、`default`。
-- GUI 清單編輯器，含 save/load/run/copy 流程。
-- 可選擇是否納入 domains、custom IPs 與 CIDR blocks。
-- 輸出模式切換：`Domains + IPs` 或 `IPs only`。
-- GUI 提供查詢失敗報告。
-- 於 `output/` 產生帶時間戳記的輸出快照。
-- 工具可將混合 domain/IP 輸入去重與排序並輸出 TXT/JSON。
-- `traffics/` 下提供可選流量 OCR 輔助工具（偏向 YouTube 擷取）。
+## 🗂️ At a Glance
 
-## 🗂️ 專案結構
+| Area | Details |
+|---|---|
+| 清單集合 | `ai`、`gfw`、`ai_gfw`、`gfw_wo_ai`、`non_gfw`、`default` |
+| 核心流程 | DNS 解析 + 合併、去重/排序、GUI 編輯、快照匯出 |
+| 輸出格式 | TXT + JSON |
+| 主要輸出目錄 | `output/` |
+| 主要進入點 | `code/` 下的 CLI 腳本，以及 `gui_app.py` 的 Flask GUI |
+
+## 🚀 Overview
+
+DomainAndIpManager 旨在建立可重複執行的清單產生流程：
+
+- 在 `data/` 中維護各自獨立的清單組（domains + custom IPs + CIDR + mask 檔）
+- 解析網域名稱並轉換為 CIDR 格式條目
+- 將解析結果與自訂/精選的網路區段合併
+- 輸出穩定排序的可重現結果（TXT + JSON），並可選擇產生時間戳快照
+- 可透過 CLI 運行，或啟動 Web GUI 進行互動式編輯與重建
+
+## ✨ Features
+
+| Area | Details |
+|---|---|
+| 多清單設定 | 針對不同路由策略提供分離的清單集合（`ai`、`gfw`、`ai_gfw`、`gfw_wo_ai`、`non_gfw`、`default`） |
+| DNS 解析 | `code/nslookup*.py` 腳本可將 domain 展開為 IP 區段 |
+| 排序與去重 | `code/unique_sort*.py` 會處理 domain/IP/CIDR 混合輸入並做標準化 |
+| 確定性匯出 | TXT + JSON 輸出順序穩定，並支援時間戳快照 |
+| GUI 編輯 | `gui/` 支援 `domains`、`custom_ips`、`cidr` 與 mask 設定的互動編輯 |
+| 診斷 | 選用失敗解析報告，協助除錯 DNS 解析問題 |
+| OCR 工具（選用） | `traffics/` 內提供 YouTube/影片擷取輔助 |
+
+---
+
+## ✅ Prerequisites
+
+| Requirement | Notes |
+|---|---|
+| Python | 3.10+（建議） |
+| 網路 | DNS 查詢需要可存取網際網路 |
+| Python 套件 | `pip` 與 `requirements.txt` 內的相依套件 |
+| Git | 需要用來 clone/更新這個資料庫 |
+| OCR optional stack | 若使用流量擷取工具，需同時安裝 `ffmpeg` 與 `tesseract` |
+
+---
+
+## 📦 Installation
+
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+快速安裝：
+
+```bash
+git clone <your-fork-or-this-repo-url>
+cd DomainAndIpManager
+python3 -m pip install -r requirements.txt
+```
+
+> 假設：直接使用 CLI 並不需要額外的虛擬環境啟動流程；若使用偏好，`start_gui.sh` 仍會自動建立並使用 `.venv`。
+
+## 🧭 Usage
+
+### GUI
+
+```bash
+./start_gui.sh
+```
+
+`start_gui.sh` 會啟動 `code/gui_app.py`，並提供：
+
+- URL：`http://127.0.0.1:5000`
+- 清單檔案的 GUI 編輯介面
+- 按需產生與可複製的輸出預覽
+- 需要時會自動建立 `.venv` 並安裝/更新套件
+
+你也可以直接啟動：
+
+```bash
+python3 code/gui_app.py
+```
+
+### CLI Reference
+
+| Common task | Command |
+|---|---|
+| 解析 AI 相關清單 | `python3 code/nslookup_simplified.py` |
+| 解析 GFW 相關清單 | `python3 code/nslookup_simplified_gfw.py` |
+| 解析 GFW + AI 合併清單 | `python3 code/nslookup_simplified_gfw_w_ai.py` |
+| 解析 GFW 排除 AI 清單 | `python3 code/nslookup_simplified_gfw_wo_ai.py` |
+| 執行基礎解析流程 | `python3 code/nslookup.py` |
+| 將清單排序並去重輸出 JSON | `python3 code/unique_sort.py -i domain_and_ips.txt -o output/domain_and_ips_unique_sorted.json` |
+| 輸出標準 TXT/JSON | `python3 code/unique_sort_print.py` |
+
+注意事項：
+
+- 輸出檔會以時間戳格式寫入，例如 `output/<script>_YYYYMMDD_HHMMSS.txt`。
+- 排序腳本可透過參數指定自訂輸入/輸出路徑。
+
+### Optional OCR Utility
+
+```bash
+python3 traffics/extract_youtube_traffic.py \
+  --videos "traffics/ScreenRecording_02-03-2026 07-34-48_1.MP4" \
+           "traffics/ScreenRecording_02-03-2026 07-36-29_1.MP4"
+```
+
+需要在 `PATH` 中可找到 `ffmpeg` 與 `tesseract`。
+
+## ⚙️ Configuration
+
+- 所有 `data/` 文字檔皆為每行一筆條目。
+- 目前共用清單載入邏輯會略過以 `#` 開頭的註解行。
+- 各清單的遮罩值存放於 `data/<set>_mask.txt`。
+- 目前儲存於版本庫的遮罩值為各清單檔所定義的實際值。
+- 寫入前會先將輸入轉為穩定去重的排序輸出。
+
+### List Set Matrix
+
+| List set | Domains file | Custom IPs file | CIDR file | Mask file |
+|---|---|---|---|---|
+| `ai` | `data/ai_domains.txt` | `data/ai_custom_ips.txt` | `data/ai_cidr.txt` | `data/ai_mask.txt` |
+| `gfw` | `data/gfw_domains.txt` | `data/gfw_custom_ips.txt` | `data/gfw_cidr.txt` | `data/gfw_mask.txt` |
+| `ai_gfw` | `data/ai_gfw_domains.txt` | `data/ai_gfw_custom_ips.txt` | `data/ai_gfw_cidr.txt` | `data/ai_gfw_mask.txt` |
+| `gfw_wo_ai` | `data/gfw_wo_ai_domains.txt` | `data/gfw_wo_ai_custom_ips.txt` | `data/gfw_wo_ai_cidr.txt` | `data/gfw_wo_ai_mask.txt` |
+| `non_gfw` | `data/non_gfw_domains.txt` | `data/non_gfw_custom_ips.txt` | `data/non_gfw_cidr.txt` | `data/non_gfw_mask.txt` |
+| `default` | `data/default_domains.txt` | `data/default_custom_ips.txt` | `data/default_cidr.txt` | `data/default_mask.txt` |
+
+## 🧰 Script & Workflow Map
+
+| Script | Purpose |
+|---|---|
+| `code/nslookup.py` | 基礎 domain/IP 解析執行器 |
+| `code/nslookup_simplified.py` | AI 專用解析 + CIDR 匯出 |
+| `code/nslookup_simplified_gfw.py` | GFW 專用解析 |
+| `code/nslookup_simplified_gfw_w_ai.py` | 合併 GFW + AI 解析 |
+| `code/nslookup_simplified_gfw_wo_ai.py` | 排除 AI 的 GFW 解析 |
+| `code/unique_sort.py` | 標準化 + 去重 + JSON 輸出 |
+| `code/unique_sort_print.py` | 列印並寫入標準 TXT/JSON 輸出 |
+| `code/list_utils.py` | 共用 loader、mask 與清單處理工具 |
+| `code/gui_app.py` | Flask GUI 後端 |
+| `traffics/extract_youtube_traffic.py` | 流量擷取用選用 OCR 輔助 |
+| `start_gui.sh` | 虛擬環境初始化 + 套件安裝 + 啟動伺服器 |
+
+## 🗂️ Project Structure
 
 ```text
 DomainAndIpManager/
+├── AGENTS.md
 ├── README.md
 ├── requirements.txt
 ├── start_gui.sh
@@ -71,105 +213,30 @@ DomainAndIpManager/
 │   ├── app.js
 │   └── styles.css
 ├── data/
-│   ├── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_domains.txt
-│   ├── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_custom_ips.txt
-│   ├── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_cidr.txt
-│   └── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_mask.txt
+│   ├── *_domains.txt
+│   ├── *_custom_ips.txt
+│   ├── *_cidr.txt
+│   └── *_mask.txt
 ├── output/
 ├── demos/
+│   └── demo.png
 ├── figs/
+│   └── banner.png
 ├── traffics/
-└── i18n/
+│   └── extract_youtube_traffic.py
+├── i18n/
+│   └── localized README.md variants
+└── .github/
+    └── FUNDING.yml
 ```
 
-## ✅ 先決條件
+## 🎬 Demo
 
-- Python `3.10+`（建議；程式碼使用較新的型別語法）。
-- `pip`。
-- 可用於 DNS 查詢的網路連線。
-- OCR 輔助工具為可選：需在 `PATH` 中可找到 `ffmpeg` 與 `tesseract`。
+![Domain & IP Manager demo](demos/demo.png)
 
-## 📦 安裝
+## 🧾 Data Files
 
-```bash
-git clone <your-fork-or-this-repo-url>
-cd DomainAndIpManager
-pip install -r requirements.txt
-```
-
-相依套件：
-
-```bash
-pip install -r requirements.txt
-```
-
-## 🖥️ 快速開始（GUI）
-
-```bash
-./start_gui.sh
-```
-
-開啟 `http://127.0.0.1:5000`。
-
-說明：
-- `start_gui.sh` 會建立 `.venv`、在 `requirements.txt` 變更時安裝相依套件，並啟動 `code/gui_app.py`。
-- 也可直接使用 `python3 code/gui_app.py` 執行。
-
-## 🧭 使用方式
-
-### GUI 使用
-
-1. 選擇清單集合（`AI + GFW`、`AI`、`GFW`、`GFW (No AI)`、`Non-GFW (China)`、`Default`）。
-2. 編輯 `Domains`、`Custom IPs` 與 `CIDR` 文字區塊。
-3. 設定 `Mask` 與輸出模式（`Domains + IPs` 或 `IPs only`）。
-4. 點擊 `Save` 以儲存變更到 `data/*.txt`。
-5. 點擊 `Run` 進行解析並產生輸出。
-6. 點擊 `Copy` 複製目前輸出。
-
-### CLI 使用
-
-```bash
-python3 code/nslookup_simplified.py
-python3 code/nslookup_simplified_gfw.py
-python3 code/nslookup_simplified_gfw_w_ai.py
-python3 code/nslookup_simplified_gfw_wo_ai.py
-python3 code/nslookup.py
-```
-
-每個腳本都會在終端機輸出結果，並寫入 `output/<script>_YYYYMMDD_HHMMSS.txt`。
-
-### 排序與正規化工具
-
-```bash
-python3 code/unique_sort.py -i domain_and_ips.txt -o output/domain_and_ips_unique_sorted.json
-python3 code/unique_sort_print.py
-```
-
-- `unique_sort.py` 支援自訂輸入/輸出參數，並寫出 JSON。
-- `unique_sort_print.py` 會列印排序後的 domains/IPs，並在 `output/` 寫出 TXT 與 JSON。
-- 若 repo 根目錄不存在 `domain_and_ips.txt`，請對 `unique_sort.py` 使用 `-i <path>` 或自行建立檔案。
-
-### 可選流量擷取輔助工具
-
-```bash
-python3 traffics/extract_youtube_traffic.py \
-  --videos "traffics/ScreenRecording_02-03-2026 07-34-48_1.MP4" \
-           "traffics/ScreenRecording_02-03-2026 07-36-29_1.MP4"
-```
-
-此輔助工具會在 `traffics/` 產生由 OCR 推導的網域/IP Markdown 報告，且需要外部工具（`ffmpeg`、`tesseract`）。
-
-## 🧾 資料檔案
-
-清單採逐行格式，存放於 `data/`：
-- `ai_*`：僅 AI 清單
-- `gfw_*`：GFW 清單
-- `ai_gfw_*`：合併清單
-- `gfw_wo_ai_*`：不含 AI 的 GFW 清單
-- `non_gfw_*`：中國可存取（非 GFW）清單
-- `default_*`：舊版/預設清單
-
-範例：
+`data/` 中的資料檔為純文字逐行格式：
 
 ```text
 data/ai_domains.txt
@@ -178,114 +245,77 @@ data/ai_cidr.txt
 data/ai_mask.txt
 ```
 
-### 清單集合對照表
+同樣的命名規則也適用於 `gfw`、`ai_gfw`、`gfw_wo_ai`、`non_gfw` 與 `default`。
 
-| List set | Domains file | Custom IPs file | CIDR file | Mask file |
-|---|---|---|---|---|
-| `ai` | `data/ai_domains.txt` | `data/ai_custom_ips.txt` | `data/ai_cidr.txt` | `data/ai_mask.txt` |
-| `gfw` | `data/gfw_domains.txt` | `data/gfw_custom_ips.txt` | `data/gfw_cidr.txt` | `data/gfw_mask.txt` |
-| `ai_gfw` | `data/ai_gfw_domains.txt` | `data/ai_gfw_custom_ips.txt` | `data/ai_gfw_cidr.txt` | `data/ai_gfw_mask.txt` |
-| `gfw_wo_ai` | `data/gfw_wo_ai_domains.txt` | `data/gfw_wo_ai_custom_ips.txt` | `data/gfw_wo_ai_cidr.txt` | `data/gfw_wo_ai_mask.txt` |
-| `non_gfw` | `data/non_gfw_domains.txt` | `data/non_gfw_custom_ips.txt` | `data/non_gfw_cidr.txt` | `data/non_gfw_mask.txt` |
-| `default` | `data/default_domains.txt` | `data/default_custom_ips.txt` | `data/default_cidr.txt` | `data/default_mask.txt` |
+## 🧪 Examples
 
-## ⚙️ 設定
-
-- 每個清單檔案皆為一行一筆。
-- 以 `#` 開頭的行會由共用清單載入邏輯視為註解，並在查詢執行時忽略。
-- Mask 依各清單集合儲存在 `data/<list>_mask.txt`。
-
-目前儲存庫狀態：
-- 目前所有隨附的 mask 檔皆為 `30`（`ai`、`gfw`、`ai_gfw`、`gfw_wo_ai`、`non_gfw`、`default`）。
-
-保留自舊版 README 的說明（為相容性背景而保留）：
-- `*_mask.txt` 控制 CIDR mask（預設為 `32`，`default` 清單使用 `24`）。
-- 補充：在目前已提交的資料與腳本預設中，實際執行預設為 `30`，除非另行覆寫。
-
-## 📤 輸出
-
-- GUI + CLI：`output/<script or gui>_YYYYMMDD_HHMMSS.txt`
-- 排序工具：`output/domain_and_ips_unique_sorted.txt` 與 `.json`
-
-## 🧪 範例
-
-CLI 執行範例：
+直接執行某個解析器：
 
 ```bash
-python3 code/nslookup_simplified_gfw_w_ai.py
+python3 code/nslookup_simplified_gfw.py
 ```
 
-典型輸出格式：
+常見輸出樣式：
 
 ```text
-<domain.example>
-<resolved-ip>/30
-<custom-ip>/30
-<cidr-block>
+domain.example.com
+198.51.100.12/30
+203.0.113.44/30
+203.0.113.0/24
 ```
 
-自訂 JSON 正規化範例：
+將自訂輸入檔輸出為 JSON：
 
 ```bash
 python3 code/unique_sort.py -i ./my_list.txt -o ./output/my_list_unique_sorted.json
 ```
 
-## 🛠️ 開發說明
+## 🧪 Development Notes
 
-- 程式風格：Python 3、PEP 8、4 空白縮排、`snake_case` 命名。
-- 腳本刻意保持 CLI 友善，且多為單一用途。
-- 多個 `nslookup` 變體目前邏輯近乎相同，差異在清單鍵值對應。
-- 此儲存庫目前尚未提供自動化測試。
+- 共享 loader 與解析輔助邏輯位於 `code/list_utils.py`。
+- 輸出寫入工具採用穩定排序，確保可重現的工件。
+- 本專案目前尚未建置自動化測試框架。
+- 這是一個以腳本為主的專案，未提供 `setup.py` / `pyproject.toml`。
+- `.github/FUNDING.yml` 與 `figs/*` 資產可看出贊助與資金機制。
 
-## 🧯 疑難排解
+## 🧯 Troubleshooting
 
-- `Input file not found: domain_and_ips.txt`：
-  - 對 `code/unique_sort.py` 指定 `-i <input-file>`，或在 repo 根目錄建立 `domain_and_ips.txt`。
-- GUI 未自動開啟：
-  - 啟動後手動開啟 `http://127.0.0.1:5000`。
-- 某些網域 DNS 結果為空：
-  - 確認網路/DNS 可用性；未解析項目會顯示於 GUI 的 `Failed Lookups`。
-- 缺少相依套件：
-  - 執行 `pip install -r requirements.txt`。
-- OCR 輔助工具因命令缺失而失敗：
-  - 安裝 `ffmpeg` 與 `tesseract`，並確保兩者皆在 `PATH`。
+- `Input file not found: domain_and_ips.txt`
+  - 請使用 `python3 code/unique_sort.py -i <path> -o <path>` 指向有效輸入，或確認 `domain_and_ips.txt` 已存在於 repo 根目錄。
+- DNS 解析逾時或失敗
+  - 先確認網路與 DNS 存取，然後重試。
+- GUI 無法在 5000 埠啟動
+  - 確認已安裝 `flask`，且 `127.0.0.1:5000` 沒有其他程序佔用。
+- OCR 工具錯誤
+  - 確認 `ffmpeg` 與 `tesseract` 已安裝並可由 `PATH` 取得。
 
-## 🗺️ 路線圖
+## 🗺️ Roadmap
 
-- 新增解析、排序與查詢邊界情況的自動化測試。
-- 以共享、可參數化的 runner 減少 `nslookup` 變體間重複邏輯。
-- 擴充 `i18n/` 下的多語文件。
-- 新增可選 CI 檢查（lint 與 smoke tests）。
+- 新增用於 parsing、mask 套用與正規化的單元測試。
+- 為所有腳本與通用參數補齊清楚的 CLI 說明。
+- 提供 Python 依賴的 lock 檔或可重現環境定義。
+- 在 GUI 加上失敗 DNS 解析與合併結果差異的匯出/預覽提示。
 
-## 🤝 貢獻
+## 🤝 Contributing
 
-歡迎貢獻。
+歡迎提交貢獻。建議作法：
 
-建議流程：
-1. 為你的變更建立分支。
-2. 讓 commit 保持聚焦且使用祈使句（例如：`Limit domain list to ChatGPT, Claude, and Google AI`）。
-3. 變更產生資料行為時，附上命令輸出範例。
-4. 開 PR 時附上簡短摘要，以及任何相依/執行環境說明。
+1. 開立一則 issue 說明問題或功能需求。
+2. 保持變更聚焦且可重現。
+3. 在 PR 說明中註明預期指令使用方式與輸出變更。
+4. 當行為或指令變更時同步更新 `README.md`。
 
-## 📄 授權
+## ❤️ Support
 
-目前儲存庫根目錄未提供明確的 `LICENSE` 檔案。若你打算散布或重用本專案，請先新增或確認授權條款。
+| Donate | PayPal | Stripe |
+| --- | --- | --- |
+| [![Donate](https://camo.githubusercontent.com/24a4914f0b42c6f435f9e101621f1e52535b02c225764b2f6cc99416926004b7/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f446f6e6174652d4c617a79696e674172742d3045413545393f7374796c653d666f722d7468652d6261646765266c6f676f3d6b6f2d6669266c6f676f436f6c6f723d7768697465)](https://chat.lazying.art/donate) | [![PayPal](https://camo.githubusercontent.com/d0f57e8b016517a4b06961b24d0ca87d62fdba16e18bbdb6aba28e978dc0ea21/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f50617950616c2d526f6e677a686f754368656e2d3030343537433f7374796c653d666f722d7468652d6261646765266c6f676f3d70617970616c266c6f676f436f6c6f723d7768697465)](https://paypal.me/RongzhouChen) | [![Stripe](https://camo.githubusercontent.com/1152dfe04b6943afe3a8d2953676749603fb9f95e24088c92c97a01a897b4942/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f5374726970652d446f6e6174652d3633354246463f7374796c653d666f722d7468652d6261646765266c6f676f3d737472697065266c6f676f436f6c6f723d7768697465)](https://buy.stripe.com/aFadR8gIaflgfQV6T4fw400) |
 
-## 💖 支持
+## 📬 Contact
 
-資助資訊亦可參考 `.github/FUNDING.yml`。
+- 有錯誤回報與功能需求請開 GitHub issue。
+- 建議在回報中附上簡潔的重現步驟、預期輸出與相關指令上下文。
 
-- GitHub Sponsors: `https://github.com/sponsors/lachlanchen`
-- Project links: `https://lazying.art`, `https://chat.lazying.art`, `https://onlyideas.art`
+## 📄 License
 
-### Donation QR（若你想直接支持）
-
-| WeChat | Alipay |
-|---|---|
-| ![WeChat donation QR](figs/donate_wechat.png) | ![Alipay donation QR](figs/donate_alipay.png) |
-
-## 📝 備註
-
-- 資料檔案一行一筆。
-- `*_mask.txt` 控制 CIDR mask（預設為 `32`，`default` 清單使用 `24`）。
-- i18n 狀態說明：本儲存庫已有 `i18n/`；在地化 README 已規劃，且應在頂端保留單行語言選項列。
+在目前這個快照中，儲存庫根目錄沒有追蹤到 `LICENSE` 檔。

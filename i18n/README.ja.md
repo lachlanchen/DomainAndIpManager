@@ -1,58 +1,200 @@
 [English](../README.md) · [العربية](README.ar.md) · [Español](README.es.md) · [Français](README.fr.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [中文 (简体)](README.zh-Hans.md) · [中文（繁體）](README.zh-Hant.md) · [Deutsch](README.de.md) · [Русский](README.ru.md)
 
 
+[![LazyingArt banner](https://github.com/lachlanchen/lachlanchen/raw/main/figs/banner.png)](https://github.com/lachlanchen/lachlanchen/blob/main/figs/banner.png)
+
 # DomainAndIpManager
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-2.3%2B-000000?logo=flask&logoColor=white)
 ![dnspython](https://img.shields.io/badge/dnspython-2.4%2B-2A6DB0)
-![Platform](https://img.shields.io/badge/Platform-CLI%20%2B%20GUI-0A7B83)
-![Status](https://img.shields.io/badge/Project-Active-2ea44f)
+![Mode](https://img.shields.io/badge/Mode-CLI%20%2F%20GUI-1f6feb)
 ![Data](https://img.shields.io/badge/Data%20Sets-6-orange)
+![Status](https://img.shields.io/badge/Project-Active-2ea44f)
+![Locale](https://img.shields.io/badge/Docs-English%20%7C%209%20More-0ea5e9?logo=googletranslate&logoColor=white)
+![License](https://img.shields.io/badge/License-Not%20Included-9ca3af)
 
-AI および GFW 向けのドメイン/IP リストを管理し、DNS ルックアップを実行して、タイムスタンプ付き出力を生成します。CLI スクリプトと GUI エディタを含みます。
+ドメイン / IP / CIDR の厳選リストセットを管理し、DNS を決定論的な IP ブロックへ変換して重複排除し、ルーティングやフィルタリングのワークフローで使える再現可能なスナップショットとしてエクスポートする Python ツールキットです。
 
-## 🚀 概要
-
-DomainAndIpManager は、以下を行う Python ツールキットです。
-- 複数のリストセット（`ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default`）を維持管理。
-- ドメインの `A` レコードを解決し、`IP/mask` エントリに変換。
-- ドメイン由来 IP とカスタム IP/CIDR ソースを統合。
-- 後段のネットワーク/ルーティング運用向けに、再現性のあるタイムスタンプ付き出力ファイルを生成。
-
-以下の両方をサポートします。
-- `code/nslookup*.py` とソート系ユーティリティによる CLI ワークフロー。
-- Flask ベースの Web GUI（`code/gui_app.py` + `gui/*`）による対話的なリスト編集とルックアップ実行。
-
-### 一覧
-
-| 項目 | 得られるもの |
+| Focus | Details |
 |---|---|
-| リストセット | `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default` |
-| インターフェース | CLI スクリプト + Flask GUI |
-| 出力形式 | タイムスタンプ付きテキストスナップショット + ソート済み TXT/JSON |
-| 主なワークフロー | リスト編集 → ドメイン解決 → カスタムレンジ統合 → エクスポート |
-| オプション補助 | `traffics/` 配下の YouTube トラフィック OCR 抽出 |
+| Domain sets | `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default` |
+| Core workflows | DNS 解決、決定論的マージ、正規化、エクスポート |
+| Output artifacts | `output/` 配下のタイムスタンプ付き TXT と JSON スナップショット |
+| Interfaces | CLI スクリプト + Flask GUI（`code/gui_app.py`、ローカル起動） |
+| Data format | `data/` の行ベースの domain/IP/CIDR テキストファイル |
 
-## 🎬 デモ
+---
 
-![Domain & IP Manager demo](demos/demo.png)
+## 🧭 Table of Contents
 
-## ✨ 機能
+- [Overview](#-overview)
+- [Features](#-features)
+- [Project Structure](#-project-structure)
+- [Prerequisites](#-prerequisites)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Configuration](#-configuration)
+- [Scripts & Workflow Map](#-scripts--workflow-map)
+- [Examples](#-examples)
+- [Development Notes](#-development-notes)
+- [Troubleshooting](#-troubleshooting)
+- [Roadmap](#-roadmap)
+- [Contributing](#-contributing)
+- [Support](#️-support)
+- [Contact](#-contact)
+- [License](#-license)
 
-- 複数リストセット運用: `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default`。
-- 保存/読み込み/実行/コピーに対応した GUI リストエディタ。
-- ドメイン、カスタム IP、CIDR ブロックの任意の有効化制御。
-- 出力モード切替: `Domains + IPs` または `IPs only`。
-- GUI での失敗ルックアップ報告。
-- `output/` 配下へのタイムスタンプ付き出力スナップショット。
-- 混在ドメイン/IP 入力を重複排除・ソートして TXT/JSON に整形するユーティリティ。
-- `traffics/` 配下のオプション OCR 補助（YouTube 向け抽出）。
+## 🗂️ At a Glance
 
-## 🗂️ プロジェクト構成
+| Area | Details |
+|---|---|
+| Domain sets | `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default` |
+| Core workflows | DNS 解決 + 結合、重複排除/ソート、GUI 編集、スナップショット出力 |
+| Output formats | TXT + JSON |
+| Primary output directory | `output/` |
+| Primary entrypoints | `code/` 配下の CLI スクリプト、`gui_app.py` の Flask GUI |
+
+## 🚀 Overview
+
+DomainAndIpManager は再現可能なリスト生成を目的に設計されています。
+
+- `data/` で専用のリストセットを分離して管理する（domains + custom IPs + CIDR + mask の各ファイル）
+- ドメイン名を IP に解決し、CIDR 形式のエントリへ変換する
+- 解決結果をカスタム/キュレーション済みのネットワークブロックとマージする
+- 決定論的な順序で TXT + JSON の成果物を出力し（必要に応じてタイムスタンプ付きスナップショットも）、安定再現性を確保する
+- CLI か Web GUI で実行し、インタラクティブ編集や再生成が可能
+
+## ✨ Features
+
+| Area | Details |
+|---|---|
+| Multi-list profiles | 戦略別ルーティングのために `ai` / `gfw` / `ai_gfw` / `gfw_wo_ai` / `non_gfw` / `default` の独立セットを保持 |
+| DNS resolution | ドメイン → IP ブロック拡張を行う `code/nslookup*.py` |
+| Sorting / de-duplication | `code/unique_sort*.py` が domain/IP/CIDR 混在入力の正規化と重複排除を実施 |
+| Deterministic export | 安定した並び順で TXT + JSON を出力、タイムスタンプ付きスナップショットも生成 |
+| GUI editing | `gui/` から `domains` / `custom_ips` / `cidr` / mask 設定を対話編集 |
+| Diagnostics | 解決失敗レポート（オプション）でトラブルシューティングを支援 |
+| Optional OCR utility | YouTube / 動画向けの `traffics/` 補助 OCR ツール |
+
+---
+
+## ✅ Prerequisites
+
+| Requirement | Notes |
+|---|---|
+| Python | 3.10+（推奨） |
+| Network | DNS 参照を実行するためのインターネット接続 |
+| Python packages | `pip` および `requirements.txt` の依存関係 |
+| Git | リポジトリのクローン/更新に必要 |
+| OCR optional stack | `traffics/` のトラフィック抽出を使う場合は `ffmpeg` + `tesseract` |
+
+---
+
+## 📦 Installation
+
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+Quick setup:
+
+```bash
+git clone <your-fork-or-this-repo-url>
+cd DomainAndIpManager
+python3 -m pip install -r requirements.txt
+```
+
+> 想定: 直接の CLI 利用に追加の仮想環境初期化は必須ではありません。必要なら `start_gui.sh` が `.venv` を自動生成して利用します。
+
+## 🧭 Usage
+
+### GUI
+
+```bash
+./start_gui.sh
+```
+
+`start_gui.sh` は `code/gui_app.py` を起動し、次を提供します。
+
+- URL: `http://127.0.0.1:5000`
+- リストファイル編集用の GUI バックエンド
+- 必要時に生成し、コピーしやすい出力プレビューを表示
+- 必要に応じて `.venv` を作成し、依存関係のインストール/更新を実行
+
+直接起動も可能です。
+
+```bash
+python3 code/gui_app.py
+```
+
+### CLI Reference
+
+| Common task | Command |
+|---|---|
+| AI 向けドメインを解決 | `python3 code/nslookup_simplified.py` |
+| GFW 向けドメインを解決 | `python3 code/nslookup_simplified_gfw.py` |
+| GFW + AI の統合リストを解決 | `python3 code/nslookup_simplified_gfw_w_ai.py` |
+| GFW から AI を除いたリストを解決 | `python3 code/nslookup_simplified_gfw_wo_ai.py` |
+| ベースリゾルバーパスを実行 | `python3 code/nslookup.py` |
+| JSON へソート＋重複排除 | `python3 code/unique_sort.py -i domain_and_ips.txt -o output/domain_and_ips_unique_sorted.json` |
+| 公式 TXT/JSON をエクスポート | `python3 code/unique_sort_print.py` |
+
+Notes:
+
+- 出力ファイルは `output/<script>_YYYYMMDD_HHMMSS.txt` のようなタイムスタンプ付きファイル名で書き込まれます。
+- ソート系スクリプトは、`-i`/`-o` フラグで入力・出力パスを指定できます。
+
+### Optional OCR Utility
+
+```bash
+python3 traffics/extract_youtube_traffic.py \
+  --videos "traffics/ScreenRecording_02-03-2026 07-34-48_1.MP4" \
+           "traffics/ScreenRecording_02-03-2026 07-36-29_1.MP4"
+```
+
+`PATH` に `ffmpeg` と `tesseract` が必要です。
+
+## ⚙️ Configuration
+
+- `data/` 配下のテキストファイルは 1 行 1 項目で管理します。
+- `#` で始まるコメント行は、現在の共通リストローダーで無視されます。
+- セットごとのマスクは `data/<set>_mask.txt` に保持されます。
+- いまチェックインされているマスク値は `data/*_mask.txt` の内容に依存します。
+- 入力は書き込み前に決定論的で重複排除済みの順序へ変換されます。
+
+### List Set Matrix
+
+| List set | Domains file | Custom IPs file | CIDR file | Mask file |
+|---|---|---|---|---|
+| `ai` | `data/ai_domains.txt` | `data/ai_custom_ips.txt` | `data/ai_cidr.txt` | `data/ai_mask.txt` |
+| `gfw` | `data/gfw_domains.txt` | `data/gfw_custom_ips.txt` | `data/gfw_cidr.txt` | `data/gfw_mask.txt` |
+| `ai_gfw` | `data/ai_gfw_domains.txt` | `data/ai_gfw_custom_ips.txt` | `data/ai_gfw_cidr.txt` | `data/ai_gfw_mask.txt` |
+| `gfw_wo_ai` | `data/gfw_wo_ai_domains.txt` | `data/gfw_wo_ai_custom_ips.txt` | `data/gfw_wo_ai_cidr.txt` | `data/gfw_wo_ai_mask.txt` |
+| `non_gfw` | `data/non_gfw_domains.txt` | `data/non_gfw_custom_ips.txt` | `data/non_gfw_cidr.txt` | `data/non_gfw_mask.txt` |
+| `default` | `data/default_domains.txt` | `data/default_custom_ips.txt` | `data/default_cidr.txt` | `data/default_mask.txt` |
+
+## 🧰 Script & Workflow Map
+
+| Script | Purpose |
+|---|---|
+| `code/nslookup.py` | ベースの domain/IP 解決ランナー |
+| `code/nslookup_simplified.py` | AI 向け解決 + CIDR エクスポート |
+| `code/nslookup_simplified_gfw.py` | GFW 向け解決 |
+| `code/nslookup_simplified_gfw_w_ai.py` | GFW + AI 統合解決 |
+| `code/nslookup_simplified_gfw_wo_ai.py` | GFW から AI を除いて解決 |
+| `code/unique_sort.py` | 正規化 + 重複排除 + JSON 出力 |
+| `code/unique_sort_print.py` | 標準 TXT/JSON 成果物の表示 + 書き込み |
+| `code/list_utils.py` | 共通ローダー、マスク、リストユーティリティ |
+| `code/gui_app.py` | Flask GUI バックエンド |
+| `traffics/extract_youtube_traffic.py` | トラフィック抽出のための任意 OCR 補助 |
+| `start_gui.sh` | 仮想環境初期化 + 依存インストール + サーバ起動 |
+
+## 🗂️ Project Structure
 
 ```text
 DomainAndIpManager/
+├── AGENTS.md
 ├── README.md
 ├── requirements.txt
 ├── start_gui.sh
@@ -71,105 +213,30 @@ DomainAndIpManager/
 │   ├── app.js
 │   └── styles.css
 ├── data/
-│   ├── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_domains.txt
-│   ├── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_custom_ips.txt
-│   ├── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_cidr.txt
-│   └── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_mask.txt
+│   ├── *_domains.txt
+│   ├── *_custom_ips.txt
+│   ├── *_cidr.txt
+│   └── *_mask.txt
 ├── output/
 ├── demos/
+│   └── demo.png
 ├── figs/
+│   └── banner.png
 ├── traffics/
-└── i18n/
+│   └── extract_youtube_traffic.py
+├── i18n/
+│   └── localized README.md variants
+└── .github/
+    └── FUNDING.yml
 ```
 
-## ✅ 前提条件
+## 🎬 Demo
 
-- Python `3.10+`（推奨。コードで新しい型構文を使用）。
-- `pip`。
-- DNS クエリのためのネットワーク接続。
-- OCR 補助を使う場合: `PATH` 上で利用可能な `ffmpeg` と `tesseract`。
+![Domain & IP Manager demo](demos/demo.png)
 
-## 📦 インストール
+## 🧾 Data Files
 
-```bash
-git clone <your-fork-or-this-repo-url>
-cd DomainAndIpManager
-pip install -r requirements.txt
-```
-
-依存関係:
-
-```bash
-pip install -r requirements.txt
-```
-
-## 🖥️ クイックスタート（GUI）
-
-```bash
-./start_gui.sh
-```
-
-`http://127.0.0.1:5000` を開いてください。
-
-補足:
-- `start_gui.sh` は `.venv` を準備し、`requirements.txt` が変更された場合に依存関係をインストールして、`code/gui_app.py` を起動します。
-- `python3 code/gui_app.py` で直接起動することもできます。
-
-## 🧭 使い方
-
-### GUI の使い方
-
-1. リストセットを選択（`AI + GFW`, `AI`, `GFW`, `GFW (No AI)`, `Non-GFW (China)`, `Default`）。
-2. `Domains`, `Custom IPs`, `CIDR` の各テキストエリアを編集。
-3. `Mask` と出力モード（`Domains + IPs` または `IPs only`）を設定。
-4. `Save` をクリックして `data/*.txt` に変更を保存。
-5. `Run` をクリックして解決と出力生成を実行。
-6. `Copy` をクリックして現在の出力をコピー。
-
-### CLI の使い方
-
-```bash
-python3 code/nslookup_simplified.py
-python3 code/nslookup_simplified_gfw.py
-python3 code/nslookup_simplified_gfw_w_ai.py
-python3 code/nslookup_simplified_gfw_wo_ai.py
-python3 code/nslookup.py
-```
-
-各スクリプトは結果をターミナルに表示し、`output/<script>_YYYYMMDD_HHMMSS.txt` に書き込みます。
-
-### ソート・正規化ツール
-
-```bash
-python3 code/unique_sort.py -i domain_and_ips.txt -o output/domain_and_ips_unique_sorted.json
-python3 code/unique_sort_print.py
-```
-
-- `unique_sort.py` は入力/出力のカスタムフラグをサポートし、JSON を書き出します。
-- `unique_sort_print.py` はソート済みのドメイン/IP を表示し、TXT と JSON の両方を `output/` に書き出します。
-- リポジトリ直下に `domain_and_ips.txt` がない場合は、`unique_sort.py` に `-i <path>` を指定するか、ファイルを作成してください。
-
-### オプションのトラフィック抽出補助
-
-```bash
-python3 traffics/extract_youtube_traffic.py \
-  --videos "traffics/ScreenRecording_02-03-2026 07-34-48_1.MP4" \
-           "traffics/ScreenRecording_02-03-2026 07-36-29_1.MP4"
-```
-
-この補助ツールは `traffics/` に OCR 由来のドメイン/IP Markdown レポートを生成し、外部ツール（`ffmpeg`, `tesseract`）が必要です。
-
-## 🧾 データファイル
-
-リストは 1 行 1 エントリ形式で、`data/` 配下に保存されます。
-- `ai_*`: AI 専用リスト
-- `gfw_*`: GFW リスト
-- `ai_gfw_*`: 統合リスト
-- `gfw_wo_ai_*`: AI を除いた GFW リスト
-- `non_gfw_*`: 中国からアクセス可能（非 GFW）リスト
-- `default_*`: 従来/デフォルトリスト
-
-例:
+`data/` のデータは行区切りのテキストです。
 
 ```text
 data/ai_domains.txt
@@ -178,114 +245,77 @@ data/ai_cidr.txt
 data/ai_mask.txt
 ```
 
-### リストセット対応表
+同様の命名パターンは `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default` にも適用されます。
 
-| リストセット | Domains ファイル | Custom IPs ファイル | CIDR ファイル | Mask ファイル |
-|---|---|---|---|---|
-| `ai` | `data/ai_domains.txt` | `data/ai_custom_ips.txt` | `data/ai_cidr.txt` | `data/ai_mask.txt` |
-| `gfw` | `data/gfw_domains.txt` | `data/gfw_custom_ips.txt` | `data/gfw_cidr.txt` | `data/gfw_mask.txt` |
-| `ai_gfw` | `data/ai_gfw_domains.txt` | `data/ai_gfw_custom_ips.txt` | `data/ai_gfw_cidr.txt` | `data/ai_gfw_mask.txt` |
-| `gfw_wo_ai` | `data/gfw_wo_ai_domains.txt` | `data/gfw_wo_ai_custom_ips.txt` | `data/gfw_wo_ai_cidr.txt` | `data/gfw_wo_ai_mask.txt` |
-| `non_gfw` | `data/non_gfw_domains.txt` | `data/non_gfw_custom_ips.txt` | `data/non_gfw_cidr.txt` | `data/non_gfw_mask.txt` |
-| `default` | `data/default_domains.txt` | `data/default_custom_ips.txt` | `data/default_cidr.txt` | `data/default_mask.txt` |
+## 🧪 Examples
 
-## ⚙️ 設定
-
-- 各リストファイルは 1 行につき 1 エントリ。
-- `#` で始まる行は、共通のリスト読み込みロジックでコメントとして扱われ、ルックアップ実行時に無視されます。
-- マスクはリストセットごとに `data/<list>_mask.txt` に保存されます。
-
-現在のリポジトリ状態:
-- 同梱されているすべてのマスクファイルには現在 `30` が入っています（`ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default`）。
-
-以前の README バージョンから保持している注記（互換性コンテキストのため）:
-- `*_mask.txt` は CIDR マスクを制御します（デフォルトは `32`、`default` リストは `24`）。
-- 補足: 現在コミット済みのデータおよびスクリプト既定値では、上書きしない限り実行時の有効デフォルトは `30` です。
-
-## 📤 出力
-
-- GUI + CLI: `output/<script or gui>_YYYYMMDD_HHMMSS.txt`
-- ソートツール: `output/domain_and_ips_unique_sorted.txt` と `.json`
-
-## 🧪 例
-
-CLI 実行例:
+リゾルバーを直接 1 つ実行:
 
 ```bash
-python3 code/nslookup_simplified_gfw_w_ai.py
+python3 code/nslookup_simplified_gfw.py
 ```
 
 典型的な出力形式:
 
 ```text
-<domain.example>
-<resolved-ip>/30
-<custom-ip>/30
-<cidr-block>
+domain.example.com
+198.51.100.12/30
+203.0.113.44/30
+203.0.113.0/24
 ```
 
-カスタム JSON 正規化例:
+カスタム入力ファイルを JSON へソート:
 
 ```bash
 python3 code/unique_sort.py -i ./my_list.txt -o ./output/my_list_unique_sorted.json
 ```
 
-## 🛠️ 開発メモ
+## ✅ Development Notes
 
-- コードスタイル: Python 3、PEP 8、4 スペースインデント、`snake_case` 命名。
-- スクリプトは CLI での利用しやすさを重視し、主に単機能で設計されています。
-- `nslookup` の複数バリアントは現在、リストキーのマッピング違いを除いてほぼ同一ロジックを共有しています。
-- このリポジトリには現在、自動テストはありません。
+- 共有ローダーとリゾルバー支援ロジックは `code/list_utils.py` にあります。
+- 出力ライターは再現可能性のある順序を保証する決定論的な並び順を使用します。
+- 現在このリポジトリに自動テストフレームワークはありません。
+- `setup.py` / `pyproject.toml` はありません。スクリプト中心の構成です。
+- `.github/FUNDING.yml` と `figs/*` のアセットには寄付/支援の統合情報が含まれています。
 
-## 🧯 トラブルシューティング
+## 🧯 Troubleshooting
 
-- `Input file not found: domain_and_ips.txt`:
-  - `code/unique_sort.py` に `-i <input-file>` を指定するか、リポジトリ直下に `domain_and_ips.txt` を作成してください。
-- GUI が自動で開かない:
-  - 起動後に `http://127.0.0.1:5000` を手動で開いてください。
-- 一部ドメインで DNS 結果が空になる:
-  - ネットワーク/DNS の可用性を確認してください。解決できないドメインは GUI の `Failed Lookups` に表示されます。
-- 依存関係が不足している:
-  - `pip install -r requirements.txt` を実行してください。
-- OCR 補助でコマンド不足エラーが出る:
-  - `ffmpeg` と `tesseract` をインストールし、両方が `PATH` に通っていることを確認してください。
+- `Input file not found: domain_and_ips.txt`
+  - `python3 code/unique_sort.py -i <path> -o <path>` で有効な入力パスを指定するか、リポジトリルートに `domain_and_ips.txt` を追加してください。
+- DNS lookup timeouts or failures
+  - ネットワーク接続と DNS 到達性を確認し、再実行してください。
+- GUI fails to start on port 5000
+  - `flask` がインストール済みであること、`127.0.0.1:5000` を既に使用しているプロセスがないことを確認してください。
+- OCR utility errors
+  - `ffmpeg` と `tesseract` がインストールされ、`PATH` から参照可能であることを確認してください。
 
-## 🗺️ ロードマップ
+## 🗺️ Roadmap
 
-- 解析、ソート、ルックアップの境界ケースに対する自動テストを追加。
-- パラメータ化した共通ランナーで `nslookup` バリアント間の重複ロジックを削減。
-- `i18n/` 配下の多言語ドキュメントを拡充。
-- リントとスモークテスト向けの任意 CI チェックを追加。
+- 解析、マスク適用、正規化ユーティリティ向けにユニットテストを追加。
+- すべてのスクリプトと主要フラグに対する明確な CLI ヘルプを追加。
+- Python 依存関係のロックファイルまたは再現可能な環境定義を提供。
+- 失敗した DNS 解決と結合結果差分を GUI で可視化するエクスポート/プレビュー指標を追加。
 
-## 🤝 コントリビュート
+## 🤝 Contributing
 
-コントリビューションを歓迎します。
+Contribution は歓迎します。推奨ワークフロー:
 
-推奨ワークフロー:
-1. 変更用ブランチを作成。
-2. コミットは焦点を絞り、命令形で記述（例: `Limit domain list to ChatGPT, Claude, and Google AI`）。
-3. 生成データの挙動を変更する場合は、コマンド出力サンプルを含める。
-4. 簡潔な要約と依存関係/実行時メモを添えて PR を作成。
+1. 問題点や機能要望を整理して issue を作成します。
+2. 変更は小さく、再現可能に保ちます。
+3. 期待するコマンド利用と出力の変化を PR 説明に記載します。
+4. 挙動やコマンドが変わった場合は `README.md` を更新します。
 
-## 📄 ライセンス
+## ❤️ Support
 
-リポジトリ直下には現在、明示的な `LICENSE` ファイルがありません。再配布または再利用を予定している場合は、先にライセンス条件を追加または確認してください。
+| Donate | PayPal | Stripe |
+| --- | --- | --- |
+| [![Donate](https://camo.githubusercontent.com/24a4914f0b42c6f435f9e101621f1e52535b02c225764b2f6cc99416926004b7/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f446f6e6174652d4c617a79696e674172742d3045413545393f7374796c653d666f722d7468652d6261646765266c6f676f3d6b6f2d6669266c6f676f436f6c6f723d7768697465)](https://chat.lazying.art/donate) | [![PayPal](https://camo.githubusercontent.com/d0f57e8b016517a4b06961b24d0ca87d62fdba16e18bbdb6aba28e978dc0ea21/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f50617950616c2d526f6e677a686f754368656e2d3030343537433f7374796c653d666f722d7468652d6261646765266c6f676f3d70617970616c266c6f676f436f6c6f723d7768697465)](https://paypal.me/RongzhouChen) | [![Stripe](https://camo.githubusercontent.com/1152dfe04b6943afe3a8d2953676749603fb9f95e24088c92c97a01a897b4942/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f5374726970652d446f6e6174652d3633354246463f7374796c653d666f722d7468652d6261646765266c6f676f3d737472697065266c6f676f436f6c6f723d7768697465)](https://buy.stripe.com/aFadR8gIaflgfQV6T4fw400) |
 
-## 💖 サポート
+## 📬 Contact
 
-資金提供メタデータは `.github/FUNDING.yml` にもあります。
+- 不具合報告や機能要望は GitHub issue で受け付けます。
+- issue では再現手順、期待される出力、実行コマンドの情報を簡潔に記載してください。
 
-- GitHub Sponsors: `https://github.com/sponsors/lachlanchen`
-- プロジェクトリンク: `https://lazying.art`, `https://chat.lazying.art`, `https://onlyideas.art`
+## 📄 License
 
-### 寄付用 QR（直接支援したい場合）
-
-| WeChat | Alipay |
-|---|---|
-| ![WeChat donation QR](figs/donate_wechat.png) | ![Alipay donation QR](figs/donate_alipay.png) |
-
-## 📝 注記
-
-- データファイルは 1 行 1 エントリ。
-- `*_mask.txt` は CIDR マスクを制御します（デフォルトは `32`、`default` リストは `24`）。
-- i18n ステータス注記: このリポジトリには `i18n/` が存在し、ローカライズ README では先頭に言語オプション行を 1 行だけ置く必要があります。
+この時点ではリポジトリルートに明示的な `LICENSE` ファイルはありません。

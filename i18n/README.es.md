@@ -1,58 +1,203 @@
 [English](../README.md) · [العربية](README.ar.md) · [Español](README.es.md) · [Français](README.fr.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [中文 (简体)](README.zh-Hans.md) · [中文（繁體）](README.zh-Hant.md) · [Deutsch](README.de.md) · [Русский](README.ru.md)
 
 
+[![LazyingArt banner](https://github.com/lachlanchen/lachlanchen/raw/main/figs/banner.png)](https://github.com/lachlanchen/lachlanchen/blob/main/figs/banner.png)
+
 # DomainAndIpManager
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-2.3%2B-000000?logo=flask&logoColor=white)
 ![dnspython](https://img.shields.io/badge/dnspython-2.4%2B-2A6DB0)
-![Platform](https://img.shields.io/badge/Platform-CLI%20%2B%20GUI-0A7B83)
-![Status](https://img.shields.io/badge/Project-Active-2ea44f)
+![Mode](https://img.shields.io/badge/Mode-CLI%20%2F%20GUI-1f6feb)
 ![Data](https://img.shields.io/badge/Data%20Sets-6-orange)
+![Status](https://img.shields.io/badge/Project-Active-2ea44f)
+![Locale](https://img.shields.io/badge/Docs-English%20%7C%209%20More-0ea5e9?logo=googletranslate&logoColor=white)
+![License](https://img.shields.io/badge/License-Not%20Included-9ca3af)
 
-Administra listas de dominios/IP para contextos de IA y GFW, ejecuta búsquedas DNS y exporta salidas con marca de tiempo. Incluye scripts CLI y un editor GUI.
+Un kit de herramientas en Python para mantener conjuntos curados de dominios/IP/CIDR, resolver DNS a bloques IP deterministas, eliminar duplicados y exportar instantáneas reproducibles para flujos de enrutamiento y filtrado.
 
-## 🚀 Resumen
-
-DomainAndIpManager es un toolkit en Python para:
-- Mantener múltiples conjuntos de listas (`ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default`).
-- Resolver registros `A` de dominios y convertirlos en entradas `IP/mask`.
-- Combinar IP derivadas de dominios con fuentes personalizadas de IP y CIDR.
-- Exportar archivos de salida deterministas y con marca de tiempo para flujos de red/enrutamiento posteriores.
-
-Soporta ambos modos:
-- Flujos CLI en `code/nslookup*.py` y utilidades de ordenación.
-- Una GUI web basada en Flask (`code/gui_app.py` + `gui/*`) para editar listas y ejecutar búsquedas de forma interactiva.
-
-### Vista rápida
-
-| Área | Lo que obtienes |
+| Enfoque | Detalles |
 |---|---|
-| Conjuntos de listas | `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default` |
-| Interfaces | Scripts CLI + GUI Flask |
-| Estilo de salida | Snapshots de texto con timestamp + TXT/JSON ordenados |
-| Flujo principal | Editar listas → resolver dominios → combinar rangos personalizados → exportar |
-| Ayudante opcional | Extracción OCR de tráfico de YouTube en `traffics/` |
+| Conjuntos de dominio | `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default` |
+| Flujos principales | Resolución DNS, fusión determinista, normalización, exportación |
+| Artefactos de salida | TXT con marca temporal y JSON en `output/` |
+| Interfaces | Scripts CLI + GUI de Flask (`code/gui_app.py`, servido localmente) |
+| Formato de datos | Archivos de texto por línea con dominios/IP/CIDR en `data/` |
 
-## 🎬 Demostración
+---
 
-![Domain & IP Manager demo](demos/demo.png)
+## 🧭 Tabla de contenido
 
-## ✨ Características
+- [Resumen rápido](#-resumen-rapido)
+- [Visión general](#-vision-general)
+- [Características](#-caracteristicas)
+- [Requisitos previos](#-requisitos-previos)
+- [Instalación](#-instalacion)
+- [Uso](#-uso)
+- [Configuración](#-configuracion)
+- [Mapa de scripts y flujo](#-mapa-de-scripts-y-flujo)
+- [Estructura del proyecto](#-estructura-del-proyecto)
+- [Demostración](#-demostracion)
+- [Archivos de datos](#-archivos-de-datos)
+- [Ejemplos](#-ejemplos)
+- [Notas de desarrollo](#-notas-de-desarrollo)
+- [Solución de problemas](#-solucion-de-problemas)
+- [Hoja de ruta](#-hoja-de-ruta)
+- [Contribución](#-contribucion)
+- [Support](#️-support)
+- [Contacto](#-contacto)
+- [Licencia](#-licencia)
 
-- Flujo con múltiples conjuntos de listas: `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default`.
-- Editor de listas en GUI con flujo de guardar/cargar/ejecutar/copiar.
-- Controles opcionales de inclusión para dominios, IP personalizadas y bloques CIDR.
-- Selector de modo de salida: `Domains + IPs` o `IPs only`.
-- Reporte de búsquedas fallidas en la GUI.
-- Snapshots de salida con timestamp en `output/`.
-- Herramientas para eliminar duplicados y ordenar entradas mixtas dominio/IP a TXT/JSON.
-- Ayudante OCR opcional en `traffics/` (enfocado en YouTube).
+## 🗂️ Resumen rapido
+
+| Area | Detalles |
+|---|---|
+| Conjuntos de dominio | `ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default` |
+| Flujo principal | Resolución DNS + fusión, deduplicación/ordenación, edición por GUI y exportación de instantáneas |
+| Formatos de salida | TXT + JSON |
+| Directorio principal de salida | `output/` |
+| Puntos de entrada principales | Scripts CLI en `code/`, GUI Flask en `gui_app.py` |
+
+## 🚀 Vision general
+
+DomainAndIpManager está diseñado para generar listas de forma repetible:
+
+- Mantiene conjuntos de listas separados en `data/` (dominios + IPs personalizadas + CIDR + archivos de máscara)
+- Resuelve nombres de dominio a IP y convierte a entradas tipo CIDR
+- Fusiona entradas resueltas con bloques de red personalizados/curados
+- Exporta artefactos deterministas (TXT + JSON) con orden estable y, opcionalmente, instantáneas con marca temporal
+- Ejecuta desde CLI o inicia la GUI web para edición interactiva y regeneración
+
+## ✨ Caracteristicas
+
+| Area | Detalles |
+|---|---|
+| Perfiles multi-lista | Conjuntos separados de listas (`ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default`) para enrutamiento por estrategia |
+| Resolución DNS | Scripts `code/nslookup*.py` para expansión dominio → bloque IP |
+| Ordenado / desduplicación | `code/unique_sort*.py` gestiona normalización de dominios/IP/CIDR mixtos |
+| Exportación determinista | Orden de salida TXT + JSON estable, con instantáneas opcionales y marca temporal |
+| Edición por GUI | `gui/` para edición interactiva de `domains`, `custom_ips`, `cidr` y ajustes de máscara |
+| Diagnóstico | Informes opcionales de resoluciones fallidas para depuración |
+| Utilidad OCR opcional | Utilidades en `traffics/` para flujos de extracción de YouTube/video |
+
+---
+
+## ✅ Requisitos previos
+
+| Requisito | Notas |
+|---|---|
+| Python | 3.10+ (recomendado) |
+| Red | Acceso a Internet para consultas DNS |
+| Paquetes de Python | `pip` y dependencias de `requirements.txt` |
+| Git | Requerido para clonar/actualizar el repositorio |
+| Stack OCR opcional | `ffmpeg` + `tesseract` al usar la utilidad de extracción de tráfico |
+
+---
+
+## 📦 Instalacion
+
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+Configuración rápida:
+
+```bash
+git clone <tu-fork-o-url-de-este-repo>
+cd DomainAndIpManager
+python3 -m pip install -r requirements.txt
+```
+
+> Suposición: no es necesaria una inicialización explícita de entorno virtual para uso directo de CLI; `start_gui.sh` aún puede crear y usar `.venv` automáticamente si se prefiere.
+
+## 🧭 Uso
+
+### GUI
+
+```bash
+./start_gui.sh
+```
+
+`start_gui.sh` inicia `code/gui_app.py` y expone:
+
+- URL: `http://127.0.0.1:5000`
+- Edición respaldada por GUI para archivos de listas
+- Generación bajo demanda y vista previa de salida lista para copiar
+- Creación automática de `.venv` e instalación/actualización de dependencias cuando hace falta
+
+También puedes ejecutarlo directamente:
+
+```bash
+python3 code/gui_app.py
+```
+
+### Referencia de CLI
+
+| Tarea común | Comando |
+|---|---|
+| Resolver dominios con enfoque AI | `python3 code/nslookup_simplified.py` |
+| Resolver dominios con enfoque GFW | `python3 code/nslookup_simplified_gfw.py` |
+| Resolver dominios GFW + AI fusionados | `python3 code/nslookup_simplified_gfw_w_ai.py` |
+| Resolver dominios GFW sin AI | `python3 code/nslookup_simplified_gfw_wo_ai.py` |
+| Resolver ruta de resolución base | `python3 code/nslookup.py` |
+| Ordenar y deduplicar listas en JSON | `python3 code/unique_sort.py -i domain_and_ips.txt -o output/domain_and_ips_unique_sorted.json` |
+| Exportar TXT/JSON canónico | `python3 code/unique_sort_print.py` |
+
+Notas:
+
+- Los archivos de salida se escriben con sufijos de marca temporal como `output/<script>_YYYYMMDD_HHMMSS.txt`.
+- Los scripts de ordenado admiten rutas de entrada/salida personalizadas mediante banderas.
+
+### Utilidad OCR opcional
+
+```bash
+python3 traffics/extract_youtube_traffic.py \
+  --videos "traffics/ScreenRecording_02-03-2026 07-34-48_1.MP4" \
+           "traffics/ScreenRecording_02-03-2026 07-36-29_1.MP4"
+```
+
+Requiere `ffmpeg` y `tesseract` en `PATH`.
+
+## ⚙️ Configuracion
+
+- Mantén una entrada por línea en todos los archivos de `data/`.
+- Las líneas de comentario con `#` se ignoran en la lógica compartida actual del cargador de listas.
+- Las máscaras por lista se almacenan en `data/<set>_mask.txt`.
+- Los valores de máscara actuales del repositorio están reflejados en los contenidos de `data/*_mask.txt`.
+- La entrada se normaliza en un orden deduplicado determinista antes de escribirse.
+
+### Matriz de conjuntos de lista
+
+| Conjunto | Archivo de dominios | Archivo de IPs personalizadas | Archivo CIDR | Archivo de máscara |
+|---|---|---|---|---|
+| `ai` | `data/ai_domains.txt` | `data/ai_custom_ips.txt` | `data/ai_cidr.txt` | `data/ai_mask.txt` |
+| `gfw` | `data/gfw_domains.txt` | `data/gfw_custom_ips.txt` | `data/gfw_cidr.txt` | `data/gfw_mask.txt` |
+| `ai_gfw` | `data/ai_gfw_domains.txt` | `data/ai_gfw_custom_ips.txt` | `data/ai_gfw_cidr.txt` | `data/ai_gfw_mask.txt` |
+| `gfw_wo_ai` | `data/gfw_wo_ai_domains.txt` | `data/gfw_wo_ai_custom_ips.txt` | `data/gfw_wo_ai_cidr.txt` | `data/gfw_wo_ai_mask.txt` |
+| `non_gfw` | `data/non_gfw_domains.txt` | `data/non_gfw_custom_ips.txt` | `data/non_gfw_cidr.txt` | `data/non_gfw_mask.txt` |
+| `default` | `data/default_domains.txt` | `data/default_custom_ips.txt` | `data/default_cidr.txt` | `data/default_mask.txt` |
+
+## 🧰 Mapa de scripts y flujo
+
+| Script | Propósito |
+|---|---|
+| `code/nslookup.py` | Ejecutor base de resolución de dominio/IP |
+| `code/nslookup_simplified.py` | Resolución centrada en AI + exportación CIDR |
+| `code/nslookup_simplified_gfw.py` | Resolución centrada en GFW |
+| `code/nslookup_simplified_gfw_w_ai.py` | Resolución combinada GFW + AI |
+| `code/nslookup_simplified_gfw_wo_ai.py` | Resolución de GFW sin AI |
+| `code/unique_sort.py` | Normalizar + desduplicar + salida JSON |
+| `code/unique_sort_print.py` | Imprimir + escribir artefactos TXT/JSON canónicos |
+| `code/list_utils.py` | Cargadores compartidos, máscaras y helpers de lista |
+| `code/gui_app.py` | Backend de la GUI de Flask |
+| `traffics/extract_youtube_traffic.py` | Ayuda OCR opcional para extracción de tráfico |
+| `start_gui.sh` | Inicialización de virtualenv + instalación de dependencias + arranque del servidor |
 
 ## 🗂️ Estructura del proyecto
 
 ```text
 DomainAndIpManager/
+├── AGENTS.md
 ├── README.md
 ├── requirements.txt
 ├── start_gui.sh
@@ -71,105 +216,30 @@ DomainAndIpManager/
 │   ├── app.js
 │   └── styles.css
 ├── data/
-│   ├── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_domains.txt
-│   ├── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_custom_ips.txt
-│   ├── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_cidr.txt
-│   └── {ai,gfw,ai_gfw,gfw_wo_ai,non_gfw,default}_mask.txt
+│   ├── *_domains.txt
+│   ├── *_custom_ips.txt
+│   ├── *_cidr.txt
+│   └── *_mask.txt
 ├── output/
 ├── demos/
+│   └── demo.png
 ├── figs/
+│   └── banner.png
 ├── traffics/
-└── i18n/
+│   └── extract_youtube_traffic.py
+├── i18n/
+│   └── localized README.md variants
+└── .github/
+    └── FUNDING.yml
 ```
 
-## ✅ Requisitos previos
+## 🎬 Demostración
 
-- Python `3.10+` (recomendado; el código usa sintaxis de tipos moderna).
-- `pip`.
-- Conectividad de red para consultas DNS.
-- Opcional para el ayudante OCR: binarios `ffmpeg` y `tesseract` disponibles en `PATH`.
-
-## 📦 Instalación
-
-```bash
-git clone <your-fork-or-this-repo-url>
-cd DomainAndIpManager
-pip install -r requirements.txt
-```
-
-Dependencias:
-
-```bash
-pip install -r requirements.txt
-```
-
-## 🖥️ Inicio rápido (GUI)
-
-```bash
-./start_gui.sh
-```
-
-Abre `http://127.0.0.1:5000`.
-
-Notas:
-- `start_gui.sh` prepara `.venv`, instala dependencias cuando cambia `requirements.txt` e inicia `code/gui_app.py`.
-- También puedes ejecutarlo directamente con `python3 code/gui_app.py`.
-
-## 🧭 Uso
-
-### Uso de la GUI
-
-1. Selecciona un conjunto de listas (`AI + GFW`, `AI`, `GFW`, `GFW (No AI)`, `Non-GFW (China)`, `Default`).
-2. Edita las áreas de texto `Domains`, `Custom IPs` y `CIDR`.
-3. Define `Mask` y el modo de salida (`Domains + IPs` o `IPs only`).
-4. Haz clic en `Save` para persistir cambios en `data/*.txt`.
-5. Haz clic en `Run` para resolver y generar salida.
-6. Haz clic en `Copy` para copiar la salida actual.
-
-### Uso por CLI
-
-```bash
-python3 code/nslookup_simplified.py
-python3 code/nslookup_simplified_gfw.py
-python3 code/nslookup_simplified_gfw_w_ai.py
-python3 code/nslookup_simplified_gfw_wo_ai.py
-python3 code/nslookup.py
-```
-
-Cada script imprime resultados en la terminal y escribe `output/<script>_YYYYMMDD_HHMMSS.txt`.
-
-### Herramientas de ordenación y normalización
-
-```bash
-python3 code/unique_sort.py -i domain_and_ips.txt -o output/domain_and_ips_unique_sorted.json
-python3 code/unique_sort_print.py
-```
-
-- `unique_sort.py` soporta flags personalizadas de entrada/salida y escribe JSON.
-- `unique_sort_print.py` imprime dominios/IP ordenados y escribe TXT y JSON en `output/`.
-- Si `domain_and_ips.txt` no existe en la raíz del repositorio, usa `-i <path>` con `unique_sort.py` o crea el archivo.
-
-### Ayudante opcional de extracción de tráfico
-
-```bash
-python3 traffics/extract_youtube_traffic.py \
-  --videos "traffics/ScreenRecording_02-03-2026 07-34-48_1.MP4" \
-           "traffics/ScreenRecording_02-03-2026 07-36-29_1.MP4"
-```
-
-Este ayudante genera reportes markdown de dominios/IP derivados por OCR en `traffics/` y requiere herramientas externas (`ffmpeg`, `tesseract`).
+![Domain & IP Manager demo](demos/demo.png)
 
 ## 🧾 Archivos de datos
 
-Las listas son de una entrada por línea y se guardan en `data/`:
-- `ai_*` para listas solo de IA
-- `gfw_*` para listas GFW
-- `ai_gfw_*` para listas combinadas
-- `gfw_wo_ai_*` para GFW sin IA
-- `non_gfw_*` para listas accesibles desde China (no-GFW)
-- `default_*` para la lista heredada/predeterminada
-
-Ejemplo:
+Los archivos de datos son texto plano por líneas en `data/`:
 
 ```text
 data/ai_domains.txt
@@ -178,114 +248,77 @@ data/ai_cidr.txt
 data/ai_mask.txt
 ```
 
-### Matriz de conjuntos de listas
-
-| List set | Domains file | Custom IPs file | CIDR file | Mask file |
-|---|---|---|---|---|
-| `ai` | `data/ai_domains.txt` | `data/ai_custom_ips.txt` | `data/ai_cidr.txt` | `data/ai_mask.txt` |
-| `gfw` | `data/gfw_domains.txt` | `data/gfw_custom_ips.txt` | `data/gfw_cidr.txt` | `data/gfw_mask.txt` |
-| `ai_gfw` | `data/ai_gfw_domains.txt` | `data/ai_gfw_custom_ips.txt` | `data/ai_gfw_cidr.txt` | `data/ai_gfw_mask.txt` |
-| `gfw_wo_ai` | `data/gfw_wo_ai_domains.txt` | `data/gfw_wo_ai_custom_ips.txt` | `data/gfw_wo_ai_cidr.txt` | `data/gfw_wo_ai_mask.txt` |
-| `non_gfw` | `data/non_gfw_domains.txt` | `data/non_gfw_custom_ips.txt` | `data/non_gfw_cidr.txt` | `data/non_gfw_mask.txt` |
-| `default` | `data/default_domains.txt` | `data/default_custom_ips.txt` | `data/default_cidr.txt` | `data/default_mask.txt` |
-
-## ⚙️ Configuración
-
-- Una entrada por línea en cada archivo de lista.
-- Las líneas que empiezan por `#` se tratan como comentarios por la lógica compartida de carga de listas y se ignoran durante las ejecuciones.
-- Las máscaras se guardan por conjunto de listas en `data/<list>_mask.txt`.
-
-Estado actual del repositorio:
-- Todos los archivos de máscara incluidos actualmente contienen `30` (`ai`, `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw`, `default`).
-
-Nota preservada de versiones anteriores del README (mantenida por compatibilidad):
-- `*_mask.txt` controla la máscara CIDR (el valor predeterminado es `32`, la lista `default` usa `24`).
-- Aclaración: en los datos actualmente versionados y en los valores por defecto de scripts, los predeterminados activos en ejecución son `30` salvo que se sobrescriban.
-
-## 📤 Salidas
-
-- GUI + CLI: `output/<script or gui>_YYYYMMDD_HHMMSS.txt`
-- Herramientas de ordenación: `output/domain_and_ips_unique_sorted.txt` y `.json`
+El mismo patrón de nombres se aplica a `gfw`, `ai_gfw`, `gfw_wo_ai`, `non_gfw` y `default`.
 
 ## 🧪 Ejemplos
 
-Ejemplo de ejecución CLI:
+Ejecutar un resolvedor directamente:
 
 ```bash
-python3 code/nslookup_simplified_gfw_w_ai.py
+python3 code/nslookup_simplified_gfw.py
 ```
 
-Forma típica de la salida:
+Formato de salida típico:
 
 ```text
-<domain.example>
-<resolved-ip>/30
-<custom-ip>/30
-<cidr-block>
+domain.example.com
+198.51.100.12/30
+203.0.113.44/30
+203.0.113.0/24
 ```
 
-Ejemplo de normalización JSON personalizada:
+Ordenar una entrada personalizada a JSON:
 
 ```bash
 python3 code/unique_sort.py -i ./my_list.txt -o ./output/my_list_unique_sorted.json
 ```
 
-## 🛠️ Notas de desarrollo
+## 🧪 Notas de desarrollo
 
-- Estilo de código: Python 3, PEP 8, indentación de 4 espacios, nombres `snake_case`.
-- Los scripts son intencionalmente amigables para CLI y en su mayoría de propósito único.
-- Varias versiones de `nslookup` comparten actualmente una lógica casi idéntica con diferentes mapeos de claves de lista.
-- Actualmente no hay pruebas automatizadas en este repositorio.
+- La lógica compartida de carga y resolución reside en `code/list_utils.py`.
+- Los escritores de salida usan un orden determinista para artefactos reproducibles.
+- El repositorio actualmente no incluye un framework automático de pruebas.
+- No hay `setup.py` / `pyproject.toml`; este es un proyecto orientado a scripts.
+- `.github/FUNDING.yml` y los assets en `figs/*` indican integración de donación/funding.
 
-## 🧯 Solución de problemas
+## 🧯 Solucion de problemas
 
-- `Input file not found: domain_and_ips.txt`:
-  - Proporciona `-i <input-file>` a `code/unique_sort.py` o crea `domain_and_ips.txt` en la raíz del repositorio.
-- La GUI no se abre automáticamente:
-  - Abre `http://127.0.0.1:5000` manualmente después del inicio.
-- Resultados DNS vacíos para algunos dominios:
-  - Verifica disponibilidad de red/DNS; los dominios no resueltos se listan en `Failed Lookups` de la GUI.
-- Faltan dependencias:
-  - Ejecuta `pip install -r requirements.txt`.
-- El ayudante OCR falla por comando faltante:
-  - Instala `ffmpeg` y `tesseract` y asegúrate de que ambos estén en `PATH`.
+- `Input file not found: domain_and_ips.txt`
+  - Ejecuta `python3 code/unique_sort.py -i <ruta> -o <ruta>` con una ruta de entrada válida, o asegúrate de que exista `domain_and_ips.txt` en la raíz del repositorio.
+- Tiempos de espera o fallos en la consulta DNS
+  - Verifica la conectividad de red y el acceso DNS, luego reintenta.
+- La GUI no inicia en el puerto 5000
+  - Confirma que `flask` esté instalado y que ningún proceso esté ocupando `127.0.0.1:5000`.
+- Errores en la utilidad OCR
+  - Verifica que `ffmpeg` y `tesseract` estén instalados y accesibles desde `PATH`.
 
 ## 🗺️ Hoja de ruta
 
-- Agregar pruebas automatizadas para casos límite de parsing, ordenación y lookup.
-- Reducir lógica duplicada entre variantes de `nslookup` mediante un ejecutor compartido parametrizado.
-- Ampliar la documentación multilingüe en `i18n/`.
-- Agregar verificaciones CI opcionales para linting y smoke tests.
+- Añadir pruebas unitarias para parseado, aplicación de máscaras y utilidades de normalización.
+- Añadir ayuda clara de CLI para todos los scripts y sus flags más comunes.
+- Proveer un lockfile o definición de entorno reproducible para dependencias de Python.
+- Añadir indicadores en la GUI para salidas fallidas de DNS y diferencias de salida fusionada.
 
-## 🤝 Contribuciones
+## 🤝 Contribucion
 
-Las contribuciones son bienvenidas.
+Las contribuciones son bienvenidas. Flujo recomendado:
 
-Flujo sugerido:
-1. Crea una rama para tu cambio.
-2. Mantén los commits enfocados y en modo imperativo (por ejemplo: `Limit domain list to ChatGPT, Claude, and Google AI`).
-3. Incluye ejemplos de salida de comandos al cambiar el comportamiento de datos generados.
-4. Abre un PR con un breve resumen y notas sobre dependencias/runtime.
+1. Abre una issue describiendo el problema o la solicitud de función.
+2. Mantén los cambios enfocados y reproducibles.
+3. Documenta el uso esperado de comandos y cambios de salida en la descripción del PR.
+4. Actualiza `README.md` cuando cambie el comportamiento/comandos.
+
+## ❤️ Support
+
+| Donate | PayPal | Stripe |
+| --- | --- | --- |
+| [![Donate](https://camo.githubusercontent.com/24a4914f0b42c6f435f9e101621f1e52535b02c225764b2f6cc99416926004b7/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f446f6e6174652d4c617a79696e674172742d3045413545393f7374796c653d666f722d7468652d6261646765266c6f676f3d6b6f2d6669266c6f676f436f6c6f723d7768697465)](https://chat.lazying.art/donate) | [![PayPal](https://camo.githubusercontent.com/d0f57e8b016517a4b06961b24d0ca87d62fdba16e18bbdb6aba28e978dc0ea21/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f50617950616c2d526f6e677a686f754368656e2d3030343537433f7374796c653d666f722d7468652d6261646765266c6f676f3d70617970616c266c6f676f436f6c6f723d7768697465)](https://paypal.me/RongzhouChen) | [![Stripe](https://camo.githubusercontent.com/1152dfe04b6943afe3a8d2953676749603fb9f95e24088c92c97a01a897b4942/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f5374726970652d446f6e6174652d3633354246463f7374796c653d666f722d7468652d6261646765266c6f676f3d737472697065266c6f676f436f6c6f723d7768697465)](https://buy.stripe.com/aFadR8gIaflgfQV6T4fw400) |
+
+## 📬 Contacto
+
+- Abre una issue en GitHub para reportar errores y solicitar funciones.
+- Prefiere pasos de reproducción concisos, salida esperada y contexto del comando en los reportes.
 
 ## 📄 Licencia
 
-Actualmente no hay un archivo `LICENSE` explícito en la raíz del repositorio. Si planeas redistribuir o reutilizar este proyecto, agrega o confirma primero los términos de licencia.
-
-## 💖 Soporte
-
-Los metadatos de financiación también están disponibles en `.github/FUNDING.yml`.
-
-- GitHub Sponsors: `https://github.com/sponsors/lachlanchen`
-- Enlaces del proyecto: `https://lazying.art`, `https://chat.lazying.art`, `https://onlyideas.art`
-
-### QR de donación (si quieres apoyar directamente)
-
-| WeChat | Alipay |
-|---|---|
-| ![WeChat donation QR](figs/donate_wechat.png) | ![Alipay donation QR](figs/donate_alipay.png) |
-
-## 📝 Notas
-
-- Una entrada por línea en archivos de datos.
-- `*_mask.txt` controla la máscara CIDR (el valor predeterminado es `32`, la lista `default` usa `24`).
-- Nota de estado de i18n: `i18n/` existe en este repositorio; los README localizados están planificados y deben mantener una sola línea de opciones de idioma en la parte superior.
+En este momento no hay ningún archivo `LICENSE` rastreado en la raíz del repositorio.
